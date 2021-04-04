@@ -1,0 +1,5 @@
+{% if helpers.exists('OPNsense.unifi.general.enabled') and OPNsense.unifi.general.enabled == '1' %}
+unifi_enable="YES"
+{% else %}
+unifi_enable="NO"
+{% endif %}

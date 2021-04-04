@@ -1,0 +1,7 @@
+<menu>
+  <Services>
+    <Unifi cssClass="fa fa-wifi">
+      <General url="/ui/unifi/general/index" order="10"/>
+    </Unifi>
+  </Services>
+</menu>
