@@ -1,0 +1,1 @@
+if [ -f /usr/local/opnsense/mvc/script/run_migrations.php ]; then /usr/local/opnsense/mvc/script/run_migrations.php %%ARG%%; fi
