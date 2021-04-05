@@ -1,0 +1,5 @@
+An OPNsense wrapper for the speedtest CLI test.
+Plugin allows speedtests to be executed periodically
+through CRON, generates history of past tests, shows
+statistics (avg, min, max) for latency, download and
+upload results in the dashboard widget.
