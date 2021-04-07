@@ -25,10 +25,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 require_once("guiconfig.inc");
-$command = escapeshellcmd('/usr/local/opnsense/scripts/OPNsense/speedtest/opn_speedtest.py stat');
-$output = shell_exec($command);
-$obj = json_decode($output, True);
 ?>
+<script>
+    $(document).ready(function() {
+        ajaxGet("/api/speedtest/service/showstat", {}, function(l,status) {
+            $('#stat_samples').html("<b>"+l.samples+"<\/b>")
+            $('#stat_latency').html("<b>"+l.latency.avg+" ms<\/b><small> (min: "+l.latency.min+" ms, max: "+l.latency.max +" ms)</small>")
+            $('#stat_download').html("<b>"+l.download.avg+" Mbps<\/b><small> (min: "+l.download.min+" Mbps, max: "+l.download.max +" Mbps)</small>")
+            $('#stat_upload').html("<b>"+l.upload.avg+" Mbps<\/b><small> (min: "+l.upload.min+" Mbps, max: "+l.upload.max +" Mbps)</small>")
+        });
+    });
+</script>
 <!-- gateway table -->
 <table id="speedtest_widget_table" class="table table-striped table-condensed">
   <tr>
