@@ -38,21 +38,7 @@ require_once("guiconfig.inc");
 </script>
 <!-- gateway table -->
 <table id="speedtest_widget_table" class="table table-striped table-condensed">
-  <tr>
-      <td>
-          Avg Latency:
-      </td>
-      <td><div id="stat_latency"><?php echo $obj["latency"]["avg"]?> ms (min: <?php echo $obj["latency"]["min"]?> ms, max: <?php echo $obj["latency"]["max"]?> ms)</div>
-      </td>
-  </tr>
-  <tr>
-      <td>Avg Download:</td>
-      <td><div id="stat_download"><?php echo $obj["download"]["avg"]?> Mbps (min: <?php echo $obj["download"]["min"]?> Mbps, max: <?php echo $obj["download"]["max"]?> Mbps)</div>
-      </td>
-  </tr>
-  <tr>
-      <td>Avg Upload:</td>
-      <td><div id="stat_upload"><?php echo $obj["upload"]["avg"]?> Mbps (min: <?php echo $obj["upload"]["min"]?> Mbps, max: <?php echo $obj["upload"]["max"]?> Mbps)</div>
-        </td>
-  </tr>
+  <tr><td style="width:25%">Avg Latency:</td><td><div id="stat_latency">0.00 ms (min: 0.00 ms, max: 0.00 ms)</div></td></tr>
+  <tr><td>Avg Download:</td><td><div id="stat_download">0 Mbps (min: 0 Mbps, max: 0 Mbps)</div></td></tr>
+  <tr><td>Avg Upload:</td><td><div id="stat_upload">0 Mbps (min: 0 Mbps, max: 0 Mbps)</div></td></tr>
 </table>
