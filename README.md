@@ -10,8 +10,8 @@ https://www.routerperformance.net/opnsense-repo/
 Install this repo:
 
 ```
-sudo fetch -o /usr/local/etc/pkg/repos/mimugmail.conf https://www.routerperformance.net/mimugmail.conf
-sudo pkg update
+fetch -o /usr/local/etc/pkg/repos/mimugmail.conf https://www.routerperformance.net/mimugmail.conf
+pkg update
 ```
 
 Find out what is available in the (installed) repo:
@@ -21,7 +21,7 @@ pkg search -g -r mimugmail \*
 
 Remove this repo:
 ```
-sudo rm /usr/local/etc/pkg/repos/mimugmail.conf
+rm /usr/local/etc/pkg/repos/mimugmail.conf
 ```
 (removing the repo will not remove previously installed packages from the repo)
 
