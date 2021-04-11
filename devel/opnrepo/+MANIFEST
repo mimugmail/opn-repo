@@ -1,0 +1,13 @@
+{"name":"opnrepo",
+"origin":"devel/opnrepo",
+"version":"1.0",
+"comment":"Opnrepo repository maintained by mimugmail",
+"maintainer":"@mimugmail",
+"www":"https://github.com/mimugmail/opn-repo",
+"abi":"FreeBSD:12:amd64",
+"arch":"freebsd:12:x86:64",
+"prefix":"/",
+"desc":"Opn-repo is a custom community repository, offering a couple of packages and plugins which are not available in the core OPNsense and even wouldn’t fit. Most of the plugins only have an Enable button and you need to adjust them by yourself. This repo comes without any warranty and it is driven by myself (@mimugmail) in the spare time or during work allowed by my employer where you can also get (German) commercial support: https://www.max-it.de/loesungen/opnsense-firewall/",
+"annotations":{"FreeBSD_version":"1202000"},
+"files":{"/usr/local/etc/pkg/repos/opnrepo.conf":"f98914277d295d5cb3966464ec2a757bb1a581df5330fa529abcf9d44a919144"}
+}
