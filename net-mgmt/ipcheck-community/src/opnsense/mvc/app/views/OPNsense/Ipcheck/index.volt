@@ -37,7 +37,8 @@ Active APIs:<br/>
 <br/><br/>
 
 <button class="btn btn-primary" id="runAct" type="button">
-    <b>{{ lang._('call APIs') }}</b> <i id="runAct_progress"></i></button>
+    <b>{{ lang._('Call APIs') }}</b> <i id="runAct_progress"></i></button>
+<br/><br/>
 
 
 <table id="ipcheck_widget_table" class="table table-striped table-condensed">
