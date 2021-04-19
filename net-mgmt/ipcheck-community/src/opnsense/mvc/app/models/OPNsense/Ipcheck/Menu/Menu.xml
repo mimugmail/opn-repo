@@ -1,0 +1,8 @@
+<menu>
+  <Reporting>
+    <Ipcheck cssClass="fa fa-certificate" VisibleName="IP Check">
+        <Action VisibleName="Status" order="10" url="/ui/ipcheck"/>
+        <Settings VisibleName="Settings" order="20" url="/ui/ipcheck/settings"/>
+    </Ipcheck>
+  </Reporting>
+</menu>
