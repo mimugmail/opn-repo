@@ -1,0 +1,74 @@
+<form>
+    <field>
+        <id>settings.vpnapi</id>
+        <label>vpnapi.io</label>
+        <type>checkbox</type>
+        <help>vpnapi.io allows 100 requests per day without an API key</help>
+    </field>
+    <field>
+        <id>settings.vpnapikey</id>
+        <label>vpnapi.io API key (optional)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Increases daily limit from 100 to 1,000 requests. Get a free API key at https://vpnapi.io/signup</help>
+    </field>
+    <field>
+        <id>settings.proxycheck</id>
+        <label>proxycheck.io</label>
+        <type>checkbox</type>
+        <help>proxycheck.io allows 100 requests per day without an API key</help>
+    </field>   
+    <field>
+        <id>settings.proxycheckkey</id>
+        <label>proxycheck.io API key (optional)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Increases daily limit from 100 to 1,000 requests. Get a free API key at https://proxycheck.io/dashboard/</help>
+    </field>
+    <field>
+        <id>settings.ip2loc</id>
+        <label>ip2location.com</label>
+        <type>checkbox</type>
+        <help>demo key allows 20 requests per day</help>
+    </field>
+    <field>
+        <id>settings.ip2lockey</id>
+        <label>ip2location.com API key (optional)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Grants 5,000 credits. Get a free API key at https://ip2location.com/register?id=1005</help>
+    </field>    
+    <field>
+        <id>settings.ip2proxy</id>
+        <label>ip2proxy.com</label>
+        <type>checkbox</type>
+        <help>demo key allows 20 requests per day</help>
+    </field>
+    <field>
+        <id>settings.ip2proxykey</id>
+        <label>ip2proxy.com API key (optional)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Key grants 5,000 credits. Get a free API key at https://www.ip2location.com/web-service/ip2proxy</help>
+    </field> 
+
+    <field>
+        <id>settings.onionoo</id>
+        <label>onionoo.torproject.org</label>
+        <type>checkbox</type>
+        <help>TOR relay directory API - unlimited requests</help>
+    </field> 
+
+    <field>
+        <id>settings.ipqs</id>
+        <label>ipqualityscore.com (API key required)</label>
+        <type>checkbox</type>
+        <help>ipqualityscore.com allows 5,000 requsts per month with a free API key</help>
+    </field>
+    <field>
+        <id>settings.ipqskey</id>
+        <label>ipqualityscore.com API key</label>
+        <type>text</type>
+        <help>Get a free API key at https://www.ipqualityscore.com/</help>
+    </field>
+</form>

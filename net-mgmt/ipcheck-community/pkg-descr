@@ -1,0 +1,11 @@
+Reporting / IP Check is a plugin that verifies
+what internet knows about exposed public IP 
+addresses - works with IPv4 and IPv6.
+Includes widget. Only one API requires a (free)
+API key.
+***
+It requires (at least) an access to ip4.seeip.org
+in order to identify the public IP address of
+OPNsense. Make sure that DNS resolver isn't blocking
+seeip.org domain.
+***

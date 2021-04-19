@@ -1,0 +1,65 @@
+<model>
+    <mount>//OPNsense/ipcheck</mount>
+    <description>Ipcheck configuration</description>
+    <version>0.1</version>
+    <items>
+        <vpnapi type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </vpnapi>
+        <vpnapikey type="TextField">
+            <Required>N</Required>
+        </vpnapikey>
+
+        <proxycheck type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </proxycheck>
+        <proxycheckkey type="TextField">
+            <Required>N</Required>
+        </proxycheckkey>
+
+        <ipqs type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+            <Constraints>
+                <check001>
+                    <reference>ipqskey.check001</reference>
+                </check001>
+            </Constraints>
+        </ipqs>        
+        <ipqskey type="TextField">
+            <Required>N</Required>
+            <Constraints>
+                <check001>
+                    <type>DependConstraint</type>
+                    <addFields>
+                        <field1>ipqs</field1>
+                    </addFields>
+                </check001>
+            </Constraints>
+        </ipqskey>
+
+        <ip2loc type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+        </ip2loc>  
+        <ip2lockey type="TextField">
+            <Required>N</Required>
+        </ip2lockey>              
+
+        <ip2proxy type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+        </ip2proxy> 
+        <ip2proxykey type="TextField">
+            <Required>N</Required>
+        </ip2proxykey>
+
+        <onionoo type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+        </onionoo>  
+
+    </items>
+</model>
