@@ -29,7 +29,7 @@
 
 import requests, json, sys
 import xml.dom.minidom
-import datetime
+import datetime, ipaddress
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
@@ -51,7 +51,7 @@ def vpnapi():
         try:
             url = Request("https://vpnapi.io/api/"+ipv4+apikey)
             url.add_header('User-Agent', 'Mozilla/5.0')
-            out['ipv4']['vpnapi'] = json.load(urlopen(url, timeout=4))
+            out['ipv4']['vpnapi'] = json.load(urlopen(url, timeout=timeout))
             if debug:
                 out['ipv4']['vpnapi']['apikey'] = key
                 m = out['ipv4']['vpnapi'].get('message')
@@ -63,7 +63,7 @@ def vpnapi():
             url = Request("https://vpnapi.io/api/"+ipv6+apikey)
             url.add_header('User-Agent', 'Mozilla/5.0')
 
-            out['ipv6']['vpnapi'] = json.load(urlopen(url, timeout=4))
+            out['ipv6']['vpnapi'] = json.load(urlopen(url, timeout=timeout))
             if debug:
                 out['ipv6']['vpnapi']['apikey'] = key
                 m = out['ipv6']['vpnapi'].get('message')
@@ -79,7 +79,7 @@ def proxycheck():
         try:
             url = Request("http://proxycheck.io/v2/"+ipv4+"?"+apikey+"vpn=1&asn=1&risk=1&port=1&seen=1")
             url.add_header('User-Agent', 'Mozilla/5.0')
-            ret = json.load(urlopen(url, timeout=4))
+            ret = json.load(urlopen(url, timeout=timeout))
             out['ipv4']['proxycheck']={}
             out['ipv4']['proxycheck']['status'] = ret['status']
             out['ipv4']['proxycheck'] = ret[ipv4]
@@ -90,7 +90,7 @@ def proxycheck():
         try:
             url = Request("http://proxycheck.io/v2/"+ipv6+"?"+apikey+"vpn=1&asn=1&risk=1&port=1&seen=1")
             url.add_header('User-Agent', 'Mozilla/5.0')
-            ret = json.load(urlopen(url, timeout=4))
+            ret = json.load(urlopen(url, timeout=timeout))
             out['ipv6']['proxycheck']={}            
             out['ipv6']['proxycheck']['status'] = ret['status']
             out['ipv6']['proxycheck'] = ret[ipv6]
@@ -106,7 +106,7 @@ def ip2loc():
         try:
             url = Request("https://api.ip2location.com/v2/?ip="+ipv4+"&key="+apikey+"&format=json&package=WS8")
 
-            out['ipv4']['ip2location'] = json.load(urlopen(url, timeout=4))
+            out['ipv4']['ip2location'] = json.load(urlopen(url, timeout=timeout))
             out['ipv4']['ip2location']['apikey'] = key
         except:
             pass
@@ -115,7 +115,7 @@ def ip2loc():
             pass
             url = Request("https://api.ip2location.com/v2/?ip="+ipv6+"&key="+apikey+"&format=json&package=WS8")
 
-            out['ipv6']['ip2location'] = json.load(urlopen(url, timeout=4))
+            out['ipv6']['ip2location'] = json.load(urlopen(url, timeout=timeout))
             out['ipv6']['ip2location']['apikey'] = key
         except:
             pass
@@ -128,7 +128,7 @@ def ip2proxy():
         try:
             url = Request("https://api.ip2proxy.com/?ip="+ipv4+"&key="+apikey+"&package=PX10")
 
-            out['ipv4']['ip2proxy'] = json.load(urlopen(url, timeout=4))
+            out['ipv4']['ip2proxy'] = json.load(urlopen(url, timeout=timeout))
             out['ipv4']['ip2proxy']['apikey'] = key            
         except:
             pass
@@ -136,7 +136,7 @@ def ip2proxy():
         try:
             url = Request("https://api.ip2proxy.com/?ip="+ipv6+"&key="+apikey+"&package=PX10")
 
-            out['ipv6']['ip2proxy']  = json.load(urlopen(url, timeout=4))
+            out['ipv6']['ip2proxy']  = json.load(urlopen(url, timeout=timeout))
             out['ipv6']['ip2proxy']['apikey'] = key
         except:
             pass
@@ -147,7 +147,7 @@ def onionoo():
         try:
             out['ipv4']['onionoo']={}
             url = Request("https://onionoo.torproject.org/details?limit=4&search="+ipv4)
-            ret = json.load(urlopen(url, timeout=4))
+            ret = json.load(urlopen(url, timeout=timeout))
             if len(ret['relays']): out['ipv4']['onionoo']['relay'] = (ret['relays'][0])
             if len(ret['bridges']): out['ipv4']['onionoo']['bridge'] = (ret['relays'][0])
         except:
@@ -156,7 +156,7 @@ def onionoo():
         try:
             out['ipv6']['onionoo']={}
             url = Request("https://onionoo.torproject.org/details?limit=4&search="+ipv6)
-            ret = json.load(urlopen(url, timeout=4))
+            ret = json.load(urlopen(url, timeout=timeout))
             if len(ret['relays']): out['ipv6']['onionoo']['relay'] = (ret['relays'][0])
             if len(ret['bridges']): out['ipv6']['onionoo']['bridge'] = (ret['relays'][0])
         except:
@@ -170,7 +170,7 @@ def ipqs():
         try:
             url = Request("https://ipqualityscore.com/api/json/ip/"+apikey+"/"+ipv4+"?strictness=0")
             url.add_header('User-Agent', 'Mozilla/5.0')
-            out['ipv4']['ipqs'] = json.load(urlopen(url, timeout=4))
+            out['ipv4']['ipqs'] = json.load(urlopen(url, timeout=timeout))
             if debug: out['ipv4']['ipqs']['apikey'] = key
         except:
             pass
@@ -178,7 +178,7 @@ def ipqs():
         try:
             url = Request("https://ipqualityscore.com/api/json/ip/"+apikey+"/"+ipv6+"?strictness=0")
             url.add_header('User-Agent', 'Mozilla/5.0')
-            out['ipv6']['ipqs'] = json.load(urlopen(url, timeout=4))
+            out['ipv6']['ipqs'] = json.load(urlopen(url, timeout=timeout))
             if debug: out['ipv6']['ipqs']['apikey'] = key
         except:
             pass
@@ -383,6 +383,7 @@ def transform(out):
 #############
 
 debug = False
+timeout=1
 config = xml.dom.minidom.parse('/conf/config.xml')
 savestate = "/usr/local/opnsense/scripts/OPNsense/ipcheck/savestate.json"
 out={}
@@ -415,19 +416,28 @@ if arg == 'list':
     print(json.dumps(out, indent=3))
     sys.exit()
 
-try:
-    out['ipv4'] = {}
-    ipv4 = json.load(urlopen("https://ip4.seeip.org/json", timeout=2))['ip']
-except URLError as error:
-    ipv4 = False
-out['ipv4']['ip'] = ipv4
+out['ipv4'] = {}
+out['ipv6'] = {}
 
-try:
-    out['ipv6'] = {}
-    ipv6 = json.load(urlopen("https://ip6.seeip.org/json", timeout=2))['ip']
-    out['ipv6']['ip'] = ipv6
-except URLError as error:
-    ipv6 = False
+api4 = [("http://ip4.seeip.org/json", "ip"), ("http://api.ipify.org?format=json", "ip"), ("http://ip-api.com/json/", "query"),("http://api-ipv4.ip.sb/jsonip", "ip")] 
+ipv4 = False
+for api in api4:
+    try:
+        ipv4 = requests.get(api[0], timeout=timeout).json()[api[1]]
+        if ipaddress.IPv4Address(ipv4): break
+    except: next
+
+api6 = [("http://ip6.seeip.org/json", "ip"), ("http://api64.ipify.org?format=json", "ip"), ("http://ip-api.com/json/", "query"),("http://api-ipv6.ip.sb/jsonip", "ip")] 
+
+ipv6 = False
+for api in api6:
+    try:
+        ipv6 = requests.get(api[0], timeout=timeout).json()[api[1]]
+        if (ipv6 != ipv4) and (ipaddress.IPv6Address(ipv6)): break
+    except: next
+
+out['ipv4']['ip'] = ipv4
+out['ipv6']['ip'] = ipv6
 
 if   arg == 'vpnapi': vpnapi()
 elif arg == 'proxycheck': proxycheck()
