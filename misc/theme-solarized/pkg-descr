@@ -1,6 +1,7 @@
 The Solarized theme allows inverting color scheme 
 from dark to bright - by injecting a theme toggle
-in the top right corner.
+in the top right corner. It defaults to the default
+preference of the OS (Mac or Windows)
 
 Colors and the dark/light flipping concept taken
 from https://ethanschoonover.com/solarized/

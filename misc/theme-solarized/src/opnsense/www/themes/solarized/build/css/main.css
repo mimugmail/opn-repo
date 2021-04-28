@@ -1,5 +1,7 @@
 @charset "UTF-8";
 @import "colors.css";
+@import "dark.css" screen and (prefers-color-scheme: dark);
+@import "light.css" screen and (prefers-color-scheme: no-preference), (prefers-color-scheme: light);
 
 
 .widgetdiv .content-box-head {
