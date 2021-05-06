@@ -19,4 +19,7 @@
 --blue:   #278bd3;
 --cyan:   #2aa198;
 --green:  #859900;
+
+--fa-primary-color: var(--base02);
+--fa-secondary-color: var(--base03);
 }
