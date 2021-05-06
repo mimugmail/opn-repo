@@ -1,4 +1,7 @@
 @charset "UTF-8";
+@import "all.min.css";
+@import "v4-shims.min.css";
+
 @import "colors.css";
 @import "dark.css" screen and (prefers-color-scheme: dark);
 @import "light.css" screen and (prefers-color-scheme: no-preference), (prefers-color-scheme: light);
@@ -25,17 +28,19 @@
   padding-top: 4px;
 }
 
+
 @font-face {
-  font-family: "SourceSansProBold";
-  src: url("/ui/themes/opnsense/build/fonts/SourceSansPro-Bold/SourceSansPro-Bold.woff") format("woff"), url("/ui/themes/opnsense/build/fonts/SourceSansPro-Bold/SourceSansPro-Bold.ttf") format("truetype");
+  font-family: "bierstadtBold";
+  src: url("../fonts/bierstadt/bierstadt-bold.ttf") format("truetype");
 }
 @font-face {
-  font-family: "SourceSansProSemibold";
-  src: url("/ui/themes/opnsense/build/fonts/SourceSansPro-Semibold/SourceSansPro-Semibold.woff") format("woff"), url("/ui/themes/opnsense/build/fonts/SourceSansPro-Semibold/SourceSansPro-Semibold.ttf") format("truetype");
+  font-family: "bierstadtSemiBold";
+  font-weight: lighter;
+  src: url("../fonts/bierstadt/bierstadt-bold.ttf") format("truetype");
 }
 @font-face {
-  font-family: "SourceSansProRegular";
-  src: url("/ui/themes/opnsense/build/fonts/SourceSansPro-Regular/SourceSansPro-Regular.woff") format("woff"), url("/ui/themes/opnsense/build/fonts/SourceSansPro-Regular/SourceSansPro-Regular.ttf") format("truetype");
+  font-family: "bierstadtRegular";
+  src: url("../fonts/bierstadt/bierstadt-regular.ttf") format("truetype");
 }
 /*! normalize.css v3.0.1 | MIT License | git.io/normalize */
 html {
@@ -362,6 +367,9 @@ h3 {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.fa.fa-refresh.fa-fw::before {content: "\f01e";}
+
+/*
 .glyphicon-asterisk:before {
   content: "*";
 }
@@ -1161,7 +1169,7 @@ h3 {
 .glyphicon-tree-deciduous:before {
   content: "";
 }
-
+*/
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1278,7 +1286,7 @@ hr {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: "SourceSansProSemiBold";
+  font-family: "bierstadtSemiBold";
   font-weight: 100;
   line-height: 1.4;
   color: inherit;
@@ -2641,7 +2649,7 @@ th {
   line-height: 1.428571429;
   vertical-align: top;
   border-top: 1px solid var(--b3);
-  background-color: var(--b1);
+  background-color: var(--b2);
 }
 .table > tbody > tr > th,
 .table > tbody > tr > td {
@@ -2663,7 +2671,7 @@ th {
 .table > thead:first-child > tr:first-child > th,
 .table > thead:first-child > tr:first-child > td {
   border-top: 0;
-  font-family: "SourceSansProSemibold";
+  font-family: "bierstadtSemiBold";
   font-weight: normal;
 }
 .table > tbody + tbody {
@@ -5537,12 +5545,12 @@ a.list-group-item:hover:before, a.list-group-item:focus:before {
 
 .list-group-item.active{
   background-color: var(--accent) !important;
-  color: var(--b02) !important;
+  color: var(--b03) !important;
 }
 
 .list-group-item.active:hover{
   background-color: var(--accent) !important;
-  color: var(--b2) !important;
+  color: var(--b3) !important;
 }
 
 
@@ -6952,7 +6960,7 @@ td.visible-print {
 
 html, body {
   height: 100%;
-  font-family: "SourceSansProRegular";
+  font-family: "bierstadtRegular";
   background-color: var(--b3);
 }
 
@@ -7368,7 +7376,7 @@ ul.nav > li.dropdown > ul.dropdown-menu > li > a {
 }
 .nav-tabs.nav-justified > li > a {
   color: var(--b00);
-  font-family: "SourceSansProSemibold";
+  font-family: "bierstadtSemiBold";
 }
 @media (min-width: 768px) {
   .nav-tabs.nav-justified > li > a {
@@ -7422,7 +7430,7 @@ table {
 }
 
 .table th, strong, b {
-  font-family: "SourceSansProSemibold";
+  font-family: "bierstadtSemiBold";
   font-weight: normal;
 }
 
@@ -7534,7 +7542,8 @@ table {
 .btn-xs,
 .btn-group-xs > .btn {
   /* emulates btn-xs */
-  padding: 1px 3px;
+  padding: 3px 3px;
+  padding-top: 4px;
 }
 
 ::-webkit-scrollbar {
@@ -7734,8 +7743,8 @@ tr.phase1_tr >td {background-color:var(--green) !important;}
 }
 
 .table.table-condensed > thead > tr > th {
-  color: var(--b03) !important;
-  background: var(--b1) !important;
+  color: var(--b02) !important;
+  background: var(--b2) !important;
 }
 
 .tokens-container.form-control {
@@ -7751,7 +7760,7 @@ tr.phase1_tr >td {background-color:var(--green) !important;}
 }
 
 .plugin_entry > td > b {
-  color: var(--b03) !important;
+  color: var(--b01) !important;
 }
 
 .navbar-theme {
