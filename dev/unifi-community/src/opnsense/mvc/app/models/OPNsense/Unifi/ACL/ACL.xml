@@ -1,0 +1,9 @@
+<acl>
+   <page-services-unifi>
+      <name>Services: Unifi</name>
+      <patterns>
+         <pattern>ui/unifi/*</pattern>
+         <pattern>api/unifi/*</pattern>
+      </patterns>
+   </page-services-unifi>
+</acl>

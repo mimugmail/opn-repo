@@ -1,0 +1,35 @@
+<form>
+    <field>
+        <id>settings.username</id>
+        <label>Unifi username</label>
+        <type>text</type>
+        <help>Username required to Unifi Controller</help>
+    </field>
+    <field>
+        <id>settings.password</id>
+        <label>Unifi password</label>
+        <type>text</type>
+        <help>Username required to Unifi Controller</help>
+    </field>
+    <field>
+        <id>settings.siteid</id>
+        <label>Unifi site ID</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Site ID</help>
+    </field>
+    <field>
+        <id>settings.servername</id>
+        <label>Unifi server</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Unifi Controller IP or hostname</help>
+    </field> 
+    <field>
+        <id>settings.port</id>
+        <label>Unifi port (typically 8443)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Unifi Controller port</help>
+    </field>
+</form>
