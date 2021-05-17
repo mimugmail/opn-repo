@@ -1,0 +1,71 @@
+<model>
+    <mount>//OPNsense/nextdns/settingsCli</mount>
+    <description>Nextdns CLI configuration</description>
+    <version>0.0.1</version>
+    <items>
+        <enabled type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+        </enabled>
+
+        <email type="TextField">
+            <Required>N</Required>
+        </email>
+
+        <password type="TextField">
+            <Required>N</Required>
+        </password>
+
+        <config type="TextField">
+            <Required>Y</Required>
+        </config>
+
+        <listen type="TextField">
+            <default>localhost:53</default>
+            <Required>Y</Required>            
+        </listen>
+
+        <setup-router type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>            
+        </setup-router>
+
+        <cache-size type="TextField">
+            <default>10MB</default>
+            <Required>Y</Required>            
+        </cache-size>
+
+        <cache-max-age type="TextField">
+            <default>0s</default>
+            <Required>Y</Required>            
+        </cache-max-age>
+
+        <max-ttl type="TextField">
+            <default>5s</default>
+            <Required>Y</Required>            
+        </max-ttl>        
+
+        <timeout type="TextField">
+            <default>0s</default>
+            <Required>Y</Required>            
+        </timeout>
+
+        <hardened-privacy type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>            
+        </hardened-privacy>
+
+        <log-queries type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>            
+        </log-queries>
+
+        <use-hosts type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>            
+        </use-hosts>
+
+
+
+    </items>
+</model>

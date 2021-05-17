@@ -1,0 +1,2 @@
+nextdns:/etc/rc.conf.d/nextdns
+nextdns.conf:/usr/local/etc/nextdns.conf

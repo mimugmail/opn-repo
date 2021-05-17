@@ -1,0 +1,93 @@
+<form>
+    <field>
+        <id>general.enabled</id>
+        <label>NextDNS CLI Enable</label>
+        <type>checkbox</type>
+        <help>Enable or disable Nextdns CLI</help>
+    </field>
+
+    <field>
+        <id>general.email</id>
+        <label>NextDNS email</label>
+        <type>text</type>
+        <help>Email registered on nextdns.com</help>
+    </field>
+    <field>
+        <id>general.password</id>
+        <label>NextDNS password</label>
+        <type>text</type>
+        <help>Password registered on nextdns.com</help>
+    </field>
+
+    <field>
+        <id>general.config</id>
+        <label>Nextdns site ID</label>
+        <type>text</type>
+        <help>Config ID</help>
+    </field>
+
+    <field>
+        <id>general.listen</id>
+        <label>Nextdns localhost:port</label>
+        <type>text</type>
+        <help>Localhost:port for CLI to listen</help>
+    </field>
+
+    <field>
+        <id>general.setup-router</id>
+        <label>Nextdns setup router</label>
+        <type>checkbox</type>
+        <help>Setup-router</help>
+    </field>
+
+    <field>
+        <id>general.cache-size</id>
+        <label>Nextdns cache size</label>
+        <type>text</type>
+        <help>Cache size in MB</help>
+    </field>
+
+    <field>
+        <id>general.cache-max-age</id>
+        <label>Nextdns cache max age</label>
+        <type>text</type>
+        <help>Cache max age</help>
+    </field>
+
+    <field>
+        <id>general.max-ttl</id>
+        <label>Nextdns query max time-to-live</label>
+        <type>text</type>
+        <help>Max ttl</help>
+    </field>
+
+    <field>
+        <id>general.timeout</id>
+        <label>Nextdns query timeout</label>
+        <type>text</type>
+        <help>Query timeout</help>
+    </field>
+    
+    <field>
+        <id>general.hardened-privacy</id>
+        <label>Nextdns hardened privacy</label>
+        <type>checkbox</type>
+        <help>Hardened privacy</help>
+    </field>
+    
+    <field>
+        <id>general.log-queries</id>
+        <label>Nextdns query logs</label>
+        <type>checkbox</type>
+        <help>Query logs</help>
+    </field>
+    
+    <field>
+        <id>general.use-hosts</id>
+        <label>Nextdns uses hosts file</label>
+        <type>checkbox</type>
+        <help>Use hosts before query</help>
+    </field>
+        
+
+</form>
