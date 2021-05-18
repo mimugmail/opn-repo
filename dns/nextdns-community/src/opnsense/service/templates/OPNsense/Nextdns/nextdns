@@ -1,0 +1,5 @@
+{% if helpers.exists('OPNsense.nextdns.general.enabled') and OPNsense.nextdns.general.enabled == '1' %}
+nextdns_enable="YES"
+{% else %}
+nextdns_enable="NO"
+{% endif %}

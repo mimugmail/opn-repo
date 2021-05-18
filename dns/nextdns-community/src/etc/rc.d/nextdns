@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# $FreeBSD$
+
+. /etc/rc.subr
+name="nextdns"
+rcvar=nextdns_enable
+pidfile=/var/run/${name}.pid
+
+command=/usr/sbin/daemon
+command_args="-f -P ${pidfile} ${name} run &"
+
+stop_cmd="killall nextdns"
+status_cmd=nextdns_status
+
+load_rc_config nextdns
+
+: ${nextdns_enable="NO"}
+
+nextdns_status()
+{
+    if [ -n "$rc_pid" ]; then
+        echo "${name} is running as pid $rc_pid."
+        return 0
+    else
+        echo "${name} is not running."
+    fi
+}
+
+run_rc_command $1

@@ -1,0 +1,130 @@
+<form>
+    <field>
+        <id>general.enabled</id>
+        <label>NextDNS CLI Enabled</label>
+        <type>checkbox</type>
+        <help>Enable or disable Nextdns CLI; NextDNS CLI is not required to route requests towards NextDNS internet service.</help>
+    </field>
+
+    <field>
+        <id>general.email</id>
+        <label>NextDNS email</label>
+        <type>text</type>
+        <help>Email registered on nextdns.com - used to get/post settings, query logs and create whitelists/blacklsits</help>
+    </field>
+    <field>
+        <id>general.password</id>
+        <label>NextDNS password (write-only)</label>
+        <type>text</type>
+        <help>Password registered on nextdns.com</help>
+    </field>
+
+    <field>
+        <id>general.config</id>
+        <label>NextDNS custom configuration id</label>
+        <type>text</type>
+        <help>Current OPNsense configuration allows only one id field; NextDNS allows multiple ids, each one to be prefixed with a condition that is match for each query</help>
+    </field>
+
+    <field>
+        <id>general.autoactivate</id>
+        <label>Auto Activate</label>
+        <type>checkbox</type>
+        <help>NextDNS will run activate at startup and deactivate on exit.</help>
+    </field>
+
+    <field>
+        <id>general.setuprouter</id>
+        <label>Auto-setup router</label>
+        <type>checkbox</type>
+        <help>Automatically configure NextDNS for a router setup. Common types of router are detected to integrate gracefuly. Changes applies are undone on daemon exit. The listen option is ignored when this option is used.</help>
+    </field>
+
+    <field>
+        <id>general.listen</id>
+        <label>Nextdns listening localhost:port</label>
+        <type>text</type>
+        <help>Listen address for UDP DNS proxy server. This option is ignored if Auto-setup router is selected.</help>
+    </field>
+
+    <field>
+        <id>general.cachesize</id>
+        <label>Nextdns cache size (in MB)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Set the size of the cache in byte. Use 0 to disable caching. The value can be expressed with unit like kB, MB, GB. The cache is automatically flushed when the pointed configuration is updated. (default "0")</help>
+    </field>
+
+    <field>
+        <id>general.cachemaxage</id>
+        <label>cache-max-age duration (in sec)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>If set to greater than 0, a cached entry will be considered stale after this duration, even if the record's TTL is higher.</help>
+    </field>
+
+    <field>
+        <id>general.maxttl</id>
+        <label>Max time-to-live duration (in sec)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>If set to greater than 0, defines the maximum TTL value that will be handed out to clients. The specified maximum TTL will be given to clients instead of the true TTL value if it is lower. The true TTL value is however kept in the cache to evaluate cache entries freshness. This is best used in conjunction with the cache to force clients not to rely on their own cache in order to pick up configuration changes faster.</help>
+    </field>
+
+    <field>
+        <id>general.timeout</id>
+        <label>Query timeout (in sec)</label>
+        <type>text</type>
+        <advanced>true</advanced>
+        <help>Maximum duration allowed for a request before failing. Default: 5s</help>
+    </field>
+    
+    <field>
+        <id>general.logqueries</id>
+        <label>Log queries</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>Log DNS queries</help>
+    </field>
+    
+    <field>
+        <id>general.usehosts</id>
+        <label>Nextdns uses hosts file</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>Use hosts before query</help>
+    </field>
+
+    <field>
+        <id>general.detectcaptiveportals</id>
+        <label>Detect captive portals</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>Automatic detection of captive portals and fallback on system DNS to allow the connection to establish.Beware that enabling this feature can allow an attacker to force nextdns to disable DoH and leak unencrypted DNS traffic.</help>
+    </field>  
+
+    <field>
+        <id>general.boguspriv</id>
+        <label>Bogus private reverse lookups</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>All reverse lookups for private IP ranges (ie 192.168.x.x, etc.) are answered with "no such domain" rather than being forwarded upstream. The set of prefixes affected is the list given in RFC6303.</help>
+    </field>  
+
+    <field>
+        <id>general.reportclientinfo</id>
+        <label>Report client info</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>NextDNS will attempt to embed clients information with queries.</help>
+    </field>
+
+    <field>
+        <id>general.discoverydns</id>
+        <label>Discovery DNS</label>
+        <type>checkbox</type>
+        <advanced>true</advanced>
+        <help>The address of a DNS server to be used to discover client names. If not defined, the address learned via DHCP will be used. This setting is only active if report-client-info is set to true.</help>
+    </field>  
+
+</form>

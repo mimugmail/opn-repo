@@ -1,0 +1,9 @@
+<acl>
+   <page-services-nextdns>
+      <name>Services: Nextdns</name>
+      <patterns>
+         <pattern>ui/nextdns/*</pattern>
+         <pattern>api/nextdns/*</pattern>
+      </patterns>
+   </page-services-nextdns>
+</acl>
