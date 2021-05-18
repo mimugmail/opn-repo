@@ -1,5 +1,5 @@
 <model>
-    <mount>//OPNsense/nextdns/settingsCli</mount>
+    <mount>//OPNsense/nextdns/general</mount>
     <description>Nextdns CLI configuration</description>
     <version>0.0.1</version>
     <items>
@@ -8,11 +8,11 @@
             <Required>Y</Required>
         </enabled>
 
-        <email type="TextField">
+        <email type="EmailField">
             <Required>N</Required>
         </email>
 
-        <password type="TextField">
+        <password type="UpdateOnlyTextField">
             <Required>N</Required>
         </password>
 
@@ -22,50 +22,68 @@
 
         <listen type="TextField">
             <default>localhost:53</default>
-            <Required>Y</Required>            
+            <Required>N</Required>            
         </listen>
 
-        <setup-router type="BooleanField">
+        <setuprouter type="BooleanField">
             <default>1</default>
             <Required>Y</Required>            
-        </setup-router>
+        </setuprouter>
 
-        <cache-size type="TextField">
-            <default>10MB</default>
+        <cachesize type="IntegerField">
+            <default>10</default>
             <Required>Y</Required>            
-        </cache-size>
+        </cachesize>
 
-        <cache-max-age type="TextField">
-            <default>0s</default>
-            <Required>Y</Required>            
-        </cache-max-age>
+        <cachemaxage type="IntegerField">
+            <default>0</default>
+            <Required>N</Required>            
+        </cachemaxage>
 
-        <max-ttl type="TextField">
-            <default>5s</default>
-            <Required>Y</Required>            
-        </max-ttl>        
+        <maxttl type="IntegerField">
+            <default>5</default>
+            <Required>N</Required>            
+        </maxttl>        
 
-        <timeout type="TextField">
-            <default>0s</default>
+        <timeout type="IntegerField">
+            <default>5</default>
             <Required>Y</Required>            
         </timeout>
 
-        <hardened-privacy type="BooleanField">
+        <logqueries type="BooleanField">
+            <default>0</default>
+            <Required>N</Required>            
+        </logqueries>
+
+        <usehosts type="BooleanField">
+            <default>0</default>
+            <Required>N</Required>            
+        </usehosts>
+
+
+        <autoactivate type="BooleanField">
             <default>1</default>
             <Required>Y</Required>            
-        </hardened-privacy>
+        </autoactivate>        
 
-        <log-queries type="BooleanField">
+        <detectcaptiveportals type="BooleanField">
+            <default>0</default>
+            <Required>N</Required>            
+        </detectcaptiveportals>
+
+        <boguspriv type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>            
+        </boguspriv>
+
+        <reportclientinfo type="BooleanField">
             <default>0</default>
             <Required>Y</Required>            
-        </log-queries>
+        </reportclientinfo>
 
-        <use-hosts type="BooleanField">
+        <discoverydns type="BooleanField">
             <default>0</default>
             <Required>Y</Required>            
-        </use-hosts>
-
-
-
+        </discoverydns>        
     </items>
 </model>

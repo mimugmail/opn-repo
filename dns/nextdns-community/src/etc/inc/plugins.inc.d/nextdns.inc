@@ -1,30 +1,22 @@
 <?php
 
-
-function nextdns_enabled()
-{
-    $model = new \OPNsense\Nextdns\General();
-    return (string)$model->enabled == '1';
-}
-
 function nextdns_services()
 {
+    global $config;
     $services = array();
 
-    if (!nextdns_enabled()) {
-        return $services;
+    if (isset($config['OPNsense']['nextdns']['general']['enabled']) && $config['OPNsense']['nextdns']['general']['enabled'] == 1) {
+        $services[] = array(
+            'description' => gettext('nextdns'),
+            'configd' => array(
+                'restart' => array('nextdns restart'),
+                'start' => array('nextdns start'),
+                'stop' => array('nextdns stop'),
+            ),
+            'name' => 'nextdns',
+            'pidfile' => '/var/run/nextdns.pid',
+        );
     }
-
-    $services[] = array(
-        'description' => gettext('nextdns'),
-        'configd' => array(
-            'restart' => array('nextdns restart'),
-            'start' => array('nextdns start'),
-            'stop' => array('nextdns stop'),
-        ),
-        'name' => 'nextdns',
-        'pid' => '/var/run/nextdns.pid'
-    );
 
     return $services;
 }
