@@ -17,13 +17,22 @@
         </password>
 
         <config type="TextField">
+            <default>abcdef; 10.0.3.0/24=abcdef; 00:1c:42:2e:60:4a=abcdef</default>
             <Required>Y</Required>
+            <Multiple>Y</Multiple>
         </config>
 
         <listen type="TextField">
-            <default>localhost:53</default>
-            <Required>N</Required>            
+            <default>:53; localhost:53; 10.0.0.1:53</default>
+            <Multiple>Y</Multiple>
+            <Required>N</Required>
         </listen>
+
+        <forwarder type="TextField">
+            <default>mycompany.com=1.2.3.4,1.2.3.5; mycompany2.com=https://doh.mycompany.com/dns-query#1.2.3.4</default>
+            <Multiple>Y</Multiple>
+            <Required>N</Required>            
+        </forwarder>  
 
         <setuprouter type="BooleanField">
             <default>1</default>
@@ -81,9 +90,11 @@
             <Required>Y</Required>            
         </reportclientinfo>
 
-        <discoverydns type="BooleanField">
-            <default>0</default>
-            <Required>Y</Required>            
-        </discoverydns>        
+        <discoverydns type="TextField">
+            <default></default>
+            <Required>N</Required>            
+        </discoverydns>
+
+
     </items>
 </model>

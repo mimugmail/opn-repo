@@ -3,5 +3,9 @@ NextDNS community plugin
 Plugin Changelog
 ================
 
+0.2
+* Clean-up of CLI model - now support semicolon lists
+* Grabbing the online settings and show as JSON
+
 0.1
 * Initial CLI-only release

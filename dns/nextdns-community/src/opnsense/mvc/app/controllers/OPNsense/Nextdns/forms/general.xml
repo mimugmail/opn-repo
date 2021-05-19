@@ -21,9 +21,9 @@
 
     <field>
         <id>general.config</id>
-        <label>NextDNS custom configuration id</label>
+        <label>Configuration IDs (semicolon-separated)</label>
         <type>text</type>
-        <help>Current OPNsense configuration allows only one id field; NextDNS allows multiple ids, each one to be prefixed with a condition that is match for each query</help>
+        <help>Comma-separated field; NextDNS allows multiple ids, each one to be prefixed with a condition that is match for each query * 10.0.3.0/24=abcdef: A CIDR can be used to restrict a configuration to a subnet. * 00:1c:42:2e:60:4a=abcdef: A MAC address can be used to restrict configuration to a specific host on the LAN.</help>
     </field>
 
     <field>
@@ -42,9 +42,16 @@
 
     <field>
         <id>general.listen</id>
-        <label>Nextdns listening localhost:port</label>
+        <label>Listening [ip]:port (semicolon-separated)</label>
         <type>text</type>
-        <help>Listen address for UDP DNS proxy server. This option is ignored if Auto-setup router is selected.</help>
+        <help>Listen address for UDP DNS proxy server. This option is ignored if Auto-setup router is selected. Can be just the port (:53), ip:port (192.168.1.1:53) or host:port (localhost:53)</help>
+    </field>
+
+    <field>
+        <id>general.forwarder</id>
+        <label>DNS forward for a specified domain (semicolon-separated)</label>
+        <type>text</type>
+        <help>Forwarders can be defined to send proxy DNS traffic to an alternative DNS upstream resolver for specific domains. The format of this parameter is [DOMAIN=]SERVER_ADDR. Can ben either an IP[:PORT] for DNS53 (unencrypted UDP, TCP), or a HTTPS URL for a DNS over HTTPS server. For DoH, a bootstrap IP can be specified as follow: https://dns.nextdns.io#45.90.28.0. Several servers can be specified, separated by comas to implement failover: mycompany.com=1.2.3.4,1.2.3.5; mycompany2.com=https://doh.mycompany.com/dns-query#1.2.3.4 </help>
     </field>
 
     <field>
@@ -122,7 +129,7 @@
     <field>
         <id>general.discoverydns</id>
         <label>Discovery DNS</label>
-        <type>checkbox</type>
+        <type>text</type>
         <advanced>true</advanced>
         <help>The address of a DNS server to be used to discover client names. If not defined, the address learned via DHCP will be used. This setting is only active if report-client-info is set to true.</help>
     </field>  
