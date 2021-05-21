@@ -1,8 +1,6 @@
 <menu>
   <Services>
-    <Nextdns VisibleName="NextDNS" cssClass="fa fa-shield">
-      <General VisibleName="CLI settings" url="/ui/nextdns/general" order="30"/>
-      <Online VisibleName="Online settings" url="/ui/nextdns/online" order="40"/>
+    <Nextdns VisibleName="NextDNS" cssClass="fa fa-shield" url="/ui/nextdns/general">
     </Nextdns>
   </Services>
 </menu>

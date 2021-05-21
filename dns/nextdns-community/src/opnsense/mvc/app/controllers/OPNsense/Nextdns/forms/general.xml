@@ -1,29 +1,16 @@
 <form>
     <field>
         <id>general.enabled</id>
-        <label>NextDNS CLI Enabled</label>
+        <label>NextDNS CLI Enabled (see info)</label>
         <type>checkbox</type>
-        <help>Enable or disable Nextdns CLI; NextDNS CLI is not required to route requests towards NextDNS internet service.</help>
-    </field>
-
-    <field>
-        <id>general.email</id>
-        <label>NextDNS email</label>
-        <type>text</type>
-        <help>Email registered on nextdns.com - used to get/post settings, query logs and create whitelists/blacklsits</help>
-    </field>
-    <field>
-        <id>general.password</id>
-        <label>NextDNS password (write-only)</label>
-        <type>text</type>
-        <help>Password registered on nextdns.com</help>
+        <help>Enable or disable Nextdns CLI; Before enabling, make sure that Unbound (or any other DNS listener) is not already using port 53. Best practice is to keep Unbound enabled with a different listening port (i.e. :5300) and use it for discovery DNS</help>
     </field>
 
     <field>
         <id>general.config</id>
         <label>Configuration IDs (semicolon-separated)</label>
         <type>text</type>
-        <help>Comma-separated field; NextDNS allows multiple ids, each one to be prefixed with a condition that is match for each query * 10.0.3.0/24=abcdef: A CIDR can be used to restrict a configuration to a subnet. * 00:1c:42:2e:60:4a=abcdef: A MAC address can be used to restrict configuration to a specific host on the LAN.</help>
+        <help>Comma-separated field; NextDNS requires at least one, and allows multiple config ids, each one can be prefixed with a condition that is a match for each query. For example, a CIDR can be used to restrict a configuration to a subnet: 10.0.3.0/24=abcdef, a MAC address can be used to restrict configuration to a specific host: 00:1c:42:2e:60:4a=abcdef</help>
     </field>
 
     <field>
@@ -37,20 +24,36 @@
         <id>general.setuprouter</id>
         <label>Auto-setup router</label>
         <type>checkbox</type>
-        <help>Automatically configure NextDNS for a router setup. Common types of router are detected to integrate gracefuly. Changes applies are undone on daemon exit. The listen option is ignored when this option is used.</help>
+        <help>Automatically configure NextDNS for a router setup. Common types of routers are detected to integrate gracefuly - and this is the most optimal setting for OPNsense. Changes applied are undone on daemon exit. The listen option is ignored when this option is used.</help>
     </field>
 
     <field>
         <id>general.listen</id>
-        <label>Listening [ip]:port (semicolon-separated)</label>
+        <label>Listening [host]:port (semicolon-separated) (see info)</label>
         <type>text</type>
-        <help>Listen address for UDP DNS proxy server. This option is ignored if Auto-setup router is selected. Can be just the port (:53), ip:port (192.168.1.1:53) or host:port (localhost:53)</help>
+        <advanced>true</advanced>
+        <help>This setting is ignored if the auto-setup-router is set to true. Listening port for UDP DNS requests. Can be just the port (:53), ip:port (192.168.1.1:53) or host:port (localhost:53)</help>
     </field>
+
+    <field>
+        <id>general.reportclientinfo</id>
+        <label>Report client info</label>
+        <type>checkbox</type>
+        <help>NextDNS will attempt to detect and report tne name of the client that issued DNS queries.</help>
+    </field>
+
+    <field>
+        <id>general.discoverydns</id>
+        <label>Discovery DNS (see info)</label>
+        <type>text</type>
+        <help>This setting is only active if the report-client-info is set to true. host:port of a DNS/DHCP server that reports client names (usually this points to Unbound service, on a different port from 53). If empty, the address learned via DHCP broadcasts will be used.</help>
+    </field>  
 
     <field>
         <id>general.forwarder</id>
         <label>DNS forward for a specified domain (semicolon-separated)</label>
         <type>text</type>
+        <advanced>true</advanced>
         <help>Forwarders can be defined to send proxy DNS traffic to an alternative DNS upstream resolver for specific domains. The format of this parameter is [DOMAIN=]SERVER_ADDR. Can ben either an IP[:PORT] for DNS53 (unencrypted UDP, TCP), or a HTTPS URL for a DNS over HTTPS server. For DoH, a bootstrap IP can be specified as follow: https://dns.nextdns.io#45.90.28.0. Several servers can be specified, separated by comas to implement failover: mycompany.com=1.2.3.4,1.2.3.5; mycompany2.com=https://doh.mycompany.com/dns-query#1.2.3.4 </help>
     </field>
 
@@ -59,7 +62,7 @@
         <label>Nextdns cache size (in MB)</label>
         <type>text</type>
         <advanced>true</advanced>
-        <help>Set the size of the cache in byte. Use 0 to disable caching. The value can be expressed with unit like kB, MB, GB. The cache is automatically flushed when the pointed configuration is updated. (default "0")</help>
+        <help>Set the size of the cache in megabytes. Use 0 to disable caching. The cache is automatically flushed when the pointed configuration is updated.</help>
     </field>
 
     <field>
@@ -99,7 +102,7 @@
         <label>Nextdns uses hosts file</label>
         <type>checkbox</type>
         <advanced>true</advanced>
-        <help>Use hosts before query</help>
+        <help>Use local hosts file before querying upstream DNS servers</help>
     </field>
 
     <field>
@@ -116,22 +119,6 @@
         <type>checkbox</type>
         <advanced>true</advanced>
         <help>All reverse lookups for private IP ranges (ie 192.168.x.x, etc.) are answered with "no such domain" rather than being forwarded upstream. The set of prefixes affected is the list given in RFC6303.</help>
-    </field>  
-
-    <field>
-        <id>general.reportclientinfo</id>
-        <label>Report client info</label>
-        <type>checkbox</type>
-        <advanced>true</advanced>
-        <help>NextDNS will attempt to embed clients information with queries.</help>
-    </field>
-
-    <field>
-        <id>general.discoverydns</id>
-        <label>Discovery DNS</label>
-        <type>text</type>
-        <advanced>true</advanced>
-        <help>The address of a DNS server to be used to discover client names. If not defined, the address learned via DHCP will be used. This setting is only active if report-client-info is set to true.</help>
     </field>  
 
 </form>
