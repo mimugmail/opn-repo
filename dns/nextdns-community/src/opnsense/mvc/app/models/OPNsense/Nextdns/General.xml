@@ -17,13 +17,22 @@
         </password>
 
         <config type="TextField">
+            <default></default>
             <Required>Y</Required>
+            <Multiple>Y</Multiple>
         </config>
 
         <listen type="TextField">
-            <default>localhost:53</default>
-            <Required>N</Required>            
+            <default>:53</default>
+            <Multiple>Y</Multiple>
+            <Required>N</Required>
         </listen>
+
+        <forwarder type="TextField">
+            <default></default>
+            <Multiple>Y</Multiple>
+            <Required>N</Required>            
+        </forwarder>  
 
         <setuprouter type="BooleanField">
             <default>1</default>
@@ -41,7 +50,7 @@
         </cachemaxage>
 
         <maxttl type="IntegerField">
-            <default>5</default>
+            <default>0</default>
             <Required>N</Required>            
         </maxttl>        
 
@@ -51,7 +60,7 @@
         </timeout>
 
         <logqueries type="BooleanField">
-            <default>0</default>
+            <default>1</default>
             <Required>N</Required>            
         </logqueries>
 
@@ -59,7 +68,6 @@
             <default>0</default>
             <Required>N</Required>            
         </usehosts>
-
 
         <autoactivate type="BooleanField">
             <default>1</default>
@@ -77,13 +85,14 @@
         </boguspriv>
 
         <reportclientinfo type="BooleanField">
-            <default>0</default>
+            <default>1</default>
             <Required>Y</Required>            
         </reportclientinfo>
 
-        <discoverydns type="BooleanField">
-            <default>0</default>
-            <Required>Y</Required>            
-        </discoverydns>        
+        <discoverydns type="TextField">
+            <default></default>
+            <Required>N</Required>            
+        </discoverydns>
+
     </items>
 </model>

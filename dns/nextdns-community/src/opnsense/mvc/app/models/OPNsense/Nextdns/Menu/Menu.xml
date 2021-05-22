@@ -1,7 +1,6 @@
 <menu>
   <Services>
-    <Nextdns VisibleName="NextDNS" cssClass="fa fa-wifi">
-      <General VisibleName="General" url="/ui/nextdns/general" order="40"/>
+    <Nextdns VisibleName="NextDNS" cssClass="fa fa-shield" url="/ui/nextdns/general">
     </Nextdns>
   </Services>
 </menu>
