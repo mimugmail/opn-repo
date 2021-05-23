@@ -23,6 +23,8 @@ $( document ).ready(function() {
     });
 
     updateServiceControlUI('nextdns');
+    
+    $("div.col-md-12").append('<button class="btn btn-primary" id="nextdns" type="button" onclick="window.open(\'https\:\/\/my.nextdns.com\')"><b> my.nextdns.com</b></button>');
 
     $("#saveAct").click(function(){
         saveFormToEndpoint(url="/api/nextdns/general/set", formid='frm_general_settings',callback_ok=function(){
