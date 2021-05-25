@@ -3678,12 +3678,12 @@ select[multiple].input-lg,
 .btn-info {
   color: var(--b1);
   background-color: var(--b2);
-  border-color: var(--b2);
+  border-color: var(--b1);
 }
 .btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
-  color: var(--b3);
-  background-color: var(--a1);
-  border-color: var(--a1);
+  color: var(--red);
+  background-color: var(--b1);
+  border-color: var(--b1);
 }
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   background-image: none;
@@ -7668,7 +7668,7 @@ div[data-for*=help_for] {
 
 .btn.btn-default.btn-xs:hover { 
   background: var(--accent) !important; 
-  color: var(--b2) !important;
+  color: var(--red) !important;
 }
 
 .modal-header {
