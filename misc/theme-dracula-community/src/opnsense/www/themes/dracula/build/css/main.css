@@ -9,7 +9,7 @@
 
 .widgetdiv .content-box-head {
   background: var(--b2) !important;
-  color: var(--b00) !important;
+  color: var(--magenta) !important;
   padding-bottom: 1px !important;
   padding-top: 1px !important;
   padding-right: 1px !important;
@@ -2657,7 +2657,7 @@ th {
 }
 .table > thead > tr > th,
 .table > thead > tr > td {
-  color: var(--b02) !important;
+  color: var(--b00) !important;
   background-color: var(--b2) !important;
 }
 .table > thead > tr > th {
@@ -3611,7 +3611,7 @@ select[multiple].input-lg,
 
 .btn-default {
   color: var(--b00);
-  background-color: var(--b2);
+  background-color: var(--b3);
   border-color: var(--accent);
 }
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
@@ -3676,7 +3676,7 @@ select[multiple].input-lg,
 }
 
 .btn-info {
-  color: var(--b3);
+  color: var(--b1);
   background-color: var(--b2);
   border-color: var(--b2);
 }
@@ -7279,7 +7279,7 @@ main.page-content.col-lg-12 {
 }
 
 button.toggle-sidebar {
-  color: var(--b3);
+  color: var(--b00);
   background-color: transparent;
   font-size: 14px;
   border: none;
@@ -7322,10 +7322,10 @@ ul.nav > li.dropdown > ul.dropdown-menu > li > a {
 
 .nav-tabs > li > a,
 .nav-tabs > li > a:focus {
-  border-right: 1px solid var(--b1);
-  border-top: 1px solid var(--b1);
-  border-left: 1px solid var(--b1);
-  border-bottom: 1px solid var(--b1);
+  border-right: 1px solid var(--violet);
+  border-top: 1px solid var(--violet);
+  border-left: 1px solid var(--violet);
+  border-bottom: 1px solid var(--violet);
   color: var(--b00)
 }
 
@@ -7663,8 +7663,8 @@ div[data-for*=help_for] {
 .fa-info-circle { color: var(--b00) !important;}
 .fa-info-circle:hover { color: var(--b01) !important;}
 
-.fa-info-circle.text-muted { color: var(--b1) !important;}
-.fa-info-circle.text-muted:hover { color: var(--b1) !important;}
+.fa-info-circle.text-muted { color: var(--violet) !important;}
+.fa-info-circle.text-muted:hover { color: var(--violet) !important;}
 
 .btn.btn-default.btn-xs:hover { 
   background: var(--accent) !important; 
@@ -7672,7 +7672,7 @@ div[data-for*=help_for] {
 }
 
 .modal-header {
-  background: var(--b1) !important;
+  background: var(--red) !important;
   color: var(--b01) !important;}
 .bootstrap-dialog-title {font-size: 150%  !important;}
 #update_status.form-control {
@@ -7743,7 +7743,7 @@ tr.phase1_tr >td {background-color:var(--green) !important;}
 }
 
 .table.table-condensed > thead > tr > th {
-  color: var(--b02) !important;
+  color: var(--b01) !important;
   background: var(--b2) !important;
 }
 
