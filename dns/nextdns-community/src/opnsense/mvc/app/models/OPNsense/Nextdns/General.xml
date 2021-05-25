@@ -17,7 +17,7 @@
         </password>
 
         <config type="TextField">
-            <default></default>
+            <default>abcde</default>
             <Required>Y</Required>
             <Multiple>Y</Multiple>
         </config>

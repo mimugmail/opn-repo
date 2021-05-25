@@ -1,6 +1,11 @@
 {#
 
 #}
+<ul class="nav nav-tabs" data-tabs="tabs" id="maintabs">
+    <li class="active"><a data-toggle="tab" href="general" onClick="parent.location='general'">{{ lang._('CLI Settings') }}</a></li>
+    <li><a data-toggle="tab" href="logs" onClick="parent.location='logs'">{{ lang._('Logs') }}</a></li>
+</ul>
+
 
 <div class="tab-content content-box tab-content">
     <div id="general" class="tab-pane fade in active">
