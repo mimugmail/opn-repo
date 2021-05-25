@@ -4617,7 +4617,7 @@ tbody.collapse.in {
   padding: 9px 10px;
   margin-top: 8px;
   margin-bottom: 8px;
-  background-color: transparent;
+  background-color: var(--b01);
   background-image: none;
   border: 1px solid transparent;
   border-radius: 3px;
@@ -4771,7 +4771,7 @@ tbody.collapse.in {
   border-color: var(--b03);
 }
 .navbar-default .navbar-brand {
-  color: var(--b3);
+  color: var(--b00);
 }
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
   color: #dedede;
@@ -4781,7 +4781,7 @@ tbody.collapse.in {
   color: var(--b00);
 }
 .navbar-default .navbar-nav > li > a {
-  color: var(--b3);
+  color: var(--b00);
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
   color: var(--accent);
@@ -4792,11 +4792,11 @@ tbody.collapse.in {
   background-color: #2b2b2b;
 }
 .navbar-default .navbar-nav > .disabled > a, .navbar-default .navbar-nav > .disabled > a:hover, .navbar-default .navbar-nav > .disabled > a:focus {
-  color: var(--b2);
+  color: var(--b00);
   background-color: transparent;
 }
 .navbar-default .navbar-toggle {
-  border-color: var(--b3);
+  border-color: var(--b00);
 }
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
   background-color: #555;
