@@ -1,12 +1,12 @@
 @charset "UTF-8";
 :root {
 --base3: #282a36;
---base2: #44475a;
---base1: #f8f8f2;
---base0: #f8f8f2; /* font */
---base00:#282a36;
---base01:#50fa7b;
---base02:#44475a; /* background */
+--base2: #44475a; /* background */
+--base1: #50fa7b; /* buttons */
+--base0: #282a36; 
+--base00:#f8f8f2; /* font */
+--base01:#f8f8f2;
+--base02:#44475a; 
 --base03:#282a36;
 
 --accent:#bd93f9;

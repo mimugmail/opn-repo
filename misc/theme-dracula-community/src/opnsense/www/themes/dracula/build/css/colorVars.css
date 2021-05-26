@@ -1,0 +1,11 @@
+@charset "UTF-8";
+:root {
+  --b3:var(--base3);
+  --b2:var(--base2);
+  --b1:var(--base1);
+  --b0:var(--base0);
+  --b00:var(--base00);
+  --b01:var(--base01);
+  --b02:var(--base02);
+  --b03:var(--base03);
+}
