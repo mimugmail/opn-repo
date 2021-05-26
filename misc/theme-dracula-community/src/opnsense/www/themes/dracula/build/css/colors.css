@@ -1,25 +1,25 @@
 @charset "UTF-8";
 :root {
---base3: #282a36;
---base2: #44475a; /* background */
---base1: #50fa7b; /* buttons */
---base0: #282a36; 
---base00:#f8f8f2; /* font */
---base01:#f8f8f2;
---base02:#44475a; 
---base03:#282a36;
+  --base3: #282a36;
+  --base2: #44475a; /* background */
+  --base1: #50fa7b; /* buttons */
+  --base0: #282a36;
+  --base00: #f8f8f2; /* font */
+  --base01: #f8f8f2;
+  --base02: #44475a;
+  --base03: #282a36;
 
---accent:#bd93f9;
+  --accent: #bd93f9;
 
---yellow: #f1fa8c;
---orange: #ffb86c;
---red:    #ff5555;
---magenta:#ff79c6;
---violet: #bd93f9;
---blue:   #278bd3;
---cyan:   #8be9fd;
---green:  #50fa7b;
+  --yellow: #f1fa8c;
+  --orange: #ffb86c;
+  --red: #ff5555;
+  --magenta: #ff79c6;
+  --violet: #bd93f9;
+  --blue: #278bd3;
+  --cyan: #8be9fd;
+  --green: #50fa7b;
 
---fa-primary-color: var(--base02);
---fa-secondary-color: var(--base03);
+  --fa-primary-color: var(--base02);
+  --fa-secondary-color: var(--base03);
 }
