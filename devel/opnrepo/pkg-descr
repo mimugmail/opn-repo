@@ -1,0 +1,23 @@
+Opn-repo is a custom community repository, offering a couple of packages and
+plugins which are not available in the core OPNsense and even wouldn’t fit.
+Most of the plugins only have an Enable button and you need to adjust them by 
+yourself. This repo comes without any warranty and it is driven by myself
+(@mimugmail) in the spare time or during work allowed by my employer where 
+you can also get (German) commercial support: 
+https://www.max-it.de/loesungen/opnsense-firewall/
+
+These are the current (maybe forever) limitations of opn-repo:
+
+* Only support for OpenSSL! Please don’t ask for LibreSSL, I don’t use it as most 
+  others don’t do
+* Don’t use it in production environments, I only test a couple of them from time 
+  to time
+* There is no warranty or support from OPNsense itself available, nor do they 
+  support me for doing this, only blame me for errors
+* It will not work when you have /var in the ramdisk since the services heavily 
+  persist von performant systems with persistent data
+* I try to only compile pkg’s which are not in standard distribution so nothing 
+  breaks, but be warned with every update
+* If you encounter problems of have questions, you may get low to none response 
+  of help in OPNSense Forums or Reddit, since this is a community-only and with
+  minimal to no support
