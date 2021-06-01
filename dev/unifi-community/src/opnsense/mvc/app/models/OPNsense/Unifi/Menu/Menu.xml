@@ -1,0 +1,9 @@
+<menu>
+  <Services>
+    <Unifi VisibleName="Unifi" cssClass="fa fa-wifi">
+      <Networks url="/ui/unifi/networks" order="10"/>
+      <Devices url="/ui/unifi/devices" order="20"/>
+      <Settings url="/ui/unifi/settings" order="90"/>
+    </Unifi>
+  </Services>
+</menu>

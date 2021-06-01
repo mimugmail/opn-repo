@@ -1,0 +1,26 @@
+<model>
+    <mount>//OPNsense/unifi</mount>
+    <description>Unifi control</description>
+    <version>0.0.1</version>
+    <items>
+        <username type="TextField">
+            <Required>Y</Required>
+        </username>
+        <password type="UpdateOnlyTextField">
+            <Required>Y</Required>
+        </password>
+        <siteid type="TextField">
+            <Required>Y</Required>
+            <default>default</default>
+        </siteid>
+        <servername type="TextField">
+            <Required>Y</Required>
+            <mask>/^([0-9a-zA-Z.,_\-]){0,1024}$/u</mask>
+            <ValidationMessage>A valid servername or ip address</ValidationMessage>
+        </servername>
+        <port type="PortField">
+            <Required>Y</Required>
+            <default>8443</default>
+        </port>
+    </items>
+</model>
