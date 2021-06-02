@@ -32,7 +32,7 @@
 }
 @font-face {
   font-family: "bierstadtSemiBold";
-  font-weight: lighter;
+  font-weight: #lighter;
   src: url("../fonts/bierstadt/bierstadt-bold.ttf") format("truetype");
 }
 @font-face {
@@ -372,6 +372,11 @@ th {
 
 .fa.fa-refresh.fa-fw::before {
   content: "\f01e";
+}
+
+.glyphicon.fa-plug::before {
+  content:"\f1e6";
+  font-family:"Font Awesome 6 Pro";
 }
 
 /*
