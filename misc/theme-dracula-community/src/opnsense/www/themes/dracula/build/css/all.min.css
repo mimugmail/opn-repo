@@ -8184,6 +8184,9 @@
 .fa-trash:before {
   content: "\f1f8";
 }
+.fa-trash-o:before {
+  content: "\f1f8";
+}
 .fa-trash-arrow-up:before,
 .fa-trash-restore:before {
   content: "\f829";
