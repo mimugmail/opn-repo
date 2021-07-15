@@ -2,7 +2,6 @@
   <Services>
     <Unbound>
       <Unboundcustom cssClass="fa fa-wifi" url="/ui/unboundcustom/general/index" />
-      </Unboundcustom>
     </Unbound>
   </Services>
 </menu>
