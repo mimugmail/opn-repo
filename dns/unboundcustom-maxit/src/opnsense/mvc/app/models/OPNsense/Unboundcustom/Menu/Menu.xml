@@ -1,7 +1,8 @@
 <menu>
   <Services>
-    <Unboundcustom cssClass="fa fa-wifi">
-      <General url="/ui/unboundcustom/general/index" />
-    </Unboundcustom>
+    <Unbound>
+      <Unboundcustom cssClass="fa fa-wifi" url="/ui/unboundcustom/general/index" />
+      </Unboundcustom>
+    </Unbound>
   </Services>
 </menu>
