@@ -1,0 +1,14 @@
+<form>
+    <field>
+        <id>general.enabled</id>
+        <label>Enable</label>
+        <type>checkbox</type>
+        <help>Enable or disable Unbound Custom Options</help>
+    </field>
+    <field>
+        <id>general.customoptions</id>
+        <label>Custom Options</label>
+        <type>textbox</type>
+        <help>Please use with caution and on your own risk, there is no validation!</help>
+    </field>
+</form>

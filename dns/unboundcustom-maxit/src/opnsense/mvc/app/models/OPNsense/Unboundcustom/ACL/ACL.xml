@@ -1,0 +1,9 @@
+<acl>
+   <page-services-unbound-unboundcustom>
+      <name>Services: Unbound: Unboundcustom</name>
+      <patterns>
+         <pattern>ui/unboundcustom/*</pattern>
+         <pattern>api/unboundcustom/*</pattern>
+      </patterns>
+   </page-services-unbound-unboundcustom>
+</acl>
