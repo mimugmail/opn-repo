@@ -14,6 +14,7 @@ $(document).ready(function() {
 	$('.fa-refresh').addClass('fa-redo').removeClass('fa-refresh');
 	$('.glyphicon.glyphicon-fire').addClass('fa fa-route-highway').removeClass('glyphicon glyphicon-fire');
 	$('.fa-support').addClass('fa fa-question-circle').removeClass('fa-support');
+	$('.fa-plug').addClass('fa fa-plug')
 	$('.fa').addClass('fal fa-lg').removeClass('fa');
 });
   

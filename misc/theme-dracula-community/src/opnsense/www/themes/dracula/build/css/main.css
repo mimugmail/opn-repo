@@ -374,7 +374,7 @@ th {
   content: "\f01e";
 }
 
-.glyphicon.fa-plug::before {
+.glyphicon.fa.fa-plug::before {
   content:"\f1e6";
   font-family:"Font Awesome 6 Pro";
 }
