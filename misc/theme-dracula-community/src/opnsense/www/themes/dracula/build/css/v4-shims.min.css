@@ -31,7 +31,7 @@
   font-weight: 400;
 }
 .fa.fa-trash-o:before {
-  content: "\f2ed";
+  content: "\f1f8";
 }
 .fa.fa-file-o {
   font-family: "Font Awesome 6 Pro";
@@ -1166,7 +1166,8 @@
   content: "\f1f6";
 }
 .fa.fa-trash:before {
-  content: "\f2ed";
+  font-family: "Font Awesome 6 Pro";
+  content: "\f1f8";
 }
 .fa.fa-copyright {
   font-family: "Font Awesome 6 Pro";
