@@ -25,7 +25,7 @@
 
 PAGER?=		less
 
-PLUGIN_ABI=	21.1
+PLUGIN_ABI=	22.1
 
 all:
 	@cat ${.CURDIR}/README.md | ${PAGER}
