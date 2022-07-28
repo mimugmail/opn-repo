@@ -31,8 +31,8 @@ import csv
 import json
 import time
 import re
-import datetime, timezone
-from datetime import datetime
+import datetime
+from datetime import datetime, timezone
 import subprocess
 import statistics
 import os.path
