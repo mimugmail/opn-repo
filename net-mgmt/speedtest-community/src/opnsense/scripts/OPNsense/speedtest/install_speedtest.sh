@@ -24,14 +24,14 @@
 if [ $1 = 'http' ] 
 then 
   pkg delete -y speedtest
-  pkg install -f -y py38-speedtest-cli
+  pkg install -f -y py39-speedtest-cli-2.1.3
 elif [ $1 = 'socket' ] 
 then 
-  pkg delete -y py37-speedtest-cli py38-speedtest-cli
+  pkg delete -y py37-speedtest-cli py38-speedtest-cli py39-speedtest-cli
   pkg install -y libidn2
-  pkg add -f "https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-freebsd12-x86_64.pkg"
+  pkg add "https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-freebsd13-x86_64.pkg"
 elif [ $1 = 'delete' ]
 then
   pkg delete -y speedtest
-  pkg delete -y py37-speedtest-cli py38-speedtest-cli
+  pkg delete -y py37-speedtest-cli py38-speedtest-cli py39-speedtest-cli
 fi
