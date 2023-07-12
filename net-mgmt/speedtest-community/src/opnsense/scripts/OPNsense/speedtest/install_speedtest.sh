@@ -21,17 +21,21 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+PYTHON_PKG_NAME=$(pkg info -x 'python3*' | grep 'python3' | sed -n 's/^python\([0-9]*\).*/py\1-speedtest-cli/p')
+OOKLA_URL=$(curl -s "https://www.speedtest.net/apps/cli" | xmllint --html --xpath "string(//*[@id='freebsd']/pre/code[7]/text())" - 2>/dev/null | awk -F'"' '{print $2}')
+
 if [ $1 = 'http' ] 
 then 
   pkg delete -y speedtest
-  pkg install -f -y py38-speedtest-cli
+  pkg install -f -y ${PYTHON_PKG_NAME}
 elif [ $1 = 'socket' ] 
 then 
-  pkg delete -y py37-speedtest-cli py38-speedtest-cli
+  pkg delete -y ${PYTHON_PKG_NAME}
   pkg install -y libidn2
-  pkg add -f "https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-freebsd12-x86_64.pkg"
+  pkg add -f ${OOKLA_URL}
 elif [ $1 = 'delete' ]
 then
   pkg delete -y speedtest
-  pkg delete -y py37-speedtest-cli py38-speedtest-cli
+  pkg delete -y ${PYTHON_PKG_NAME}
 fi
+
