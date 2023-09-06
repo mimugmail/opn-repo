@@ -1,0 +1,8 @@
+<acl>
+    <page-reporting-speedtest>
+        <name>Monitoring: Speedtest</name>
+        <patterns>
+            <pattern>api/speedtest/service/*</pattern>
+        </patterns>
+    </page-reporting-speedtest>
+</acl>
