@@ -1,6 +1,4 @@
 #!/bin/sh
-#
-# $FreeBSD$
 
 . /etc/rc.subr
 name="nextdns"
@@ -28,3 +26,4 @@ nextdns_status()
 }
 
 run_rc_command $1
+
