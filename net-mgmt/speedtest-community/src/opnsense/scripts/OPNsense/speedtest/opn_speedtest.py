@@ -32,7 +32,7 @@ import json
 import time
 import re
 import datetime
-from datetime import datetime
+from datetime import datetime, timezone
 import subprocess
 import statistics
 import os.path
@@ -72,7 +72,7 @@ try:
         header = next(data)
         for row in data:
             #from timestamp to visual form
-            row[0]=datetime.fromtimestamp(float(row[0])).isoformat()
+            row[0]=datetime.fromtimestamp(float(row[0])).replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%dT%H:%M:%S')
             array.append(row)
         array=sorted(array, reverse=True)
         f.close()
