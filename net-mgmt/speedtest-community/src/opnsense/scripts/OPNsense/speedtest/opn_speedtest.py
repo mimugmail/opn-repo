@@ -79,6 +79,28 @@ try:
         print(json.dumps(array[:50]))
         quit()
 
+    # parameter r or recent - returning the last 1 entries from csv
+    if arg=='r' or arg == 'recent':
+        f = open(csvfile, 'r', encoding="utf-8")
+        data = csv.reader(f,dialect='excel')
+        header = next(data)
+        row=[]
+        for row in data:
+            #from timestamp to visual form
+            row[0]=datetime.fromtimestamp(float(row[0])).isoformat()
+        f.close()
+        out = {
+            'date': str(row[0]),
+            'server': row[2] + " " + row[3],
+            'download': row[5],
+            'upload': row[6],
+            'latency': row[7],
+            'url': row[8]
+        }
+        print(json.dumps(out))
+        quit()
+
+
     # parameter s or stat - return statistics
     if arg=='s' or arg=='stat':
         latencyarray = []

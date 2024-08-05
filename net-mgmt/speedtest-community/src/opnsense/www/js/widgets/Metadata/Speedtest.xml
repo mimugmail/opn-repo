@@ -1,0 +1,16 @@
+<metadata>
+    <speedtest>
+        <filename>Speedtest.js</filename>
+        <endpoints>
+            <endpoint>/api/speedtest/service/showrecent</endpoint>
+            <endpoint>/api/speedtest/service/showstat</endpoint>
+        </endpoints>
+        <translations>
+            <title>Speedtest</title>
+            <most_recent>Most Recent</most_recent>
+            <avg_latency>Avg. Latency</avg_latency>
+            <avg_download>Avg. Download</avg_download>
+            <avg_upload>Avg. Upload</avg_upload>
+        </translations>
+    </speedtest>
+</metadata>

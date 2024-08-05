@@ -56,6 +56,11 @@ class ServiceController extends ApiControllerBase
     {
         return (new Backend())->configdRun("speedtest showlog");
     }
+	
+	public function showrecentAction()
+	{
+		return (new Backend())->configdRun("speedtest showrecent");
+	}
 
     public function deletelogAction()
     {
