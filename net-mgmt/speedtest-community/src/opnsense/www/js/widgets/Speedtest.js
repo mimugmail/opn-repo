@@ -68,6 +68,7 @@ export default class ETProTelemetry extends BaseTableWidget {
  }
 
     async onMarkupRendered() {
+        $(`#${this.id}-title`).html(`<b><a href="/ui/speedtest/">${this.translations['title']}</a></b>`);
         let rows = [];
         rows.push([[this.translations['most_recent']], $('<span id="speedtest_most_recent">').prop('outerHTML')]);
         rows.push([[this.translations['avg_latency']], $('<span id="speedtest_avg_latency">').prop('outerHTML')]);
