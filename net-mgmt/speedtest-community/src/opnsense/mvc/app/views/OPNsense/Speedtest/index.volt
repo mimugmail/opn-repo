@@ -159,7 +159,7 @@
                 </div>
             </th></tr>
             <tr id="log_head" data-advanced="true" style="display: none;">
-                <th data-column-id="Timestamp" class="text-left" style="width:7em;">Timestamp (GMT)</th>
+                <th data-column-id="Timestamp" class="text-left" style="width:7em;">Timestamp (Local)</th>
                 <th data-column-id="ServerId" class="text-left" style="width:3em;">Server id</th>
                 <th data-column-id="ServerName" class="text-left" style="width:12em;">Server name</th>
                 <th data-column-id="Latency" class="text-left" style="width:2em;">Download</th>
