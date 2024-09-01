@@ -38,9 +38,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-import BaseTableWidget from "./BaseTableWidget.js";
-
-export default class ETProTelemetry extends BaseTableWidget {
+export default class Speedtest extends BaseTableWidget {
     constructor() {
         super();
         this.tickTimeout = 3600;
