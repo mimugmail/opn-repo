@@ -1,9 +1,9 @@
 .btn-pressed {
-  background-color: #d94f00;
+  background-color: #b695f3;
   color: white;
 
   &:hover {
-    background-color: #d94f00;
+    background-color: #b695f3;
     color: white;
   }
 }
@@ -80,7 +80,7 @@ td {
   display: inline-block;
   height: 1px;
   width: 70%;
-  background: #d94f00;
+  background: #b695f3;
   margin: 5px;
 }
 
