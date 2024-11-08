@@ -22,9 +22,9 @@
     height: auto;
     width: 50%;
     object-fit:cover;
-    background: #242424;
+    background: #68, 71, 89);
     border-radius: 0 2em 2em 0 / 0 3em 3em 0;
-    box-shadow: 3px 5px 1px 3px rgb(28, 16, 9);
+    box-shadow: 3px 5px 1px 3px rgb(68, 71, 89);
 }
 
 .large-icon {
