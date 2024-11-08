@@ -1,4 +1,3 @@
-
 document.addEventListener('readystatechange', (event) => {
 	document.styleSheets[4].disabled = true;
 	document.documentElement.setAttribute('data-theme', getTheme());
