@@ -91,10 +91,10 @@
     
     <field>
         <id>general.logqueries</id>
-        <label>Log queries to local log</label>
+        <label>Log queries</label>
         <type>checkbox</type>
         <advanced>true</advanced>
-        <help>Add DNS queries to OPNsense local log. Disabling this option will not disable general system logging of NextDNS.</help>
+        <help>Log DNS queries</help>
     </field>
     
     <field>
