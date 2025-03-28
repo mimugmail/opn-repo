@@ -6,7 +6,7 @@ rcvar=nextdns_enable
 pidfile=/var/run/${name}.pid
 
 command=/usr/sbin/daemon
-command_args="-P ${pidfile} ${name} run &"
+command_args="-P ${pidfile} ${name} run -config-file /usr/local/etc/nextdns.conf &"
 
 stop_cmd="killall nextdns"
 status_cmd=nextdns_status
