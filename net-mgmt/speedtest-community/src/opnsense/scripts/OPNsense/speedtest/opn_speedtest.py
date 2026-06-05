@@ -180,7 +180,7 @@ try:
             cmd = [speedtest, '--list']
             serverlist = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8').splitlines()
             for line in serverlist[1:11]:
-                rec = re.split("\) | \(|, ", line)
+                rec = re.split(r"\) | \(|, ", line)
                 out = {'id':rec[0].strip(), "name":rec[1].strip(), "location":rec[2].strip()+", "+rec[3], "country":rec[4].strip()}
                 array.append(out)
         print(json.dumps(array))
