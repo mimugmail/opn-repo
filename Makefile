@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2018 Franco Fichtner <franco@opnsense.org>
+# Copyright (c) 2015-2025 Franco Fichtner <franco@opnsense.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -23,63 +23,51 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-PAGER?=		less
+PLUGINSDIR?=	${.CURDIR}
 
-PLUGIN_ABI=	24.7
-
-all:
-	@cat ${.CURDIR}/README.md | ${PAGER}
-
-CATEGORIES=	benchmarks databases devel dns mail misc net-mgmt \
-		net security sysutils www
+_CATEGORIES!=	ls -1d [a-z0-9]*
+CATEGORIES?=	${_CATEGORIES}
 
 .for CATEGORY in ${CATEGORIES}
 _${CATEGORY}!=	ls -1d ${CATEGORY}/*
 PLUGIN_DIRS+=	${_${CATEGORY}}
 .endfor
 
+all:
+	@cat ${.CURDIR}/README.md | ${PAGER}
+
+.include "Mk/defaults.mk"
+.include "Mk/common.mk"
+.include "Mk/git.mk"
+
 list:
 .for PLUGIN_DIR in ${PLUGIN_DIRS}
-	@echo ${PLUGIN_DIR} -- $$(${MAKE} -C ${PLUGIN_DIR} -V PLUGIN_COMMENT)
+	@echo ${PLUGIN_DIR} -- $$(${MAKE} -C ${PLUGIN_DIR} -v PLUGIN_COMMENT) \
+	    $$(if [ "$$(${MAKE} -C ${PLUGIN_DIR} -v PLUGIN_MAINTAINER)" = "N/A" ]; then echo "(not maintained)"; fi) \
+	    $$(if [ -n "$$(${MAKE} -C ${PLUGIN_DIR} -v PLUGIN_DEVEL _PLUGIN_DEVEL=)" ]; then echo "(development only)"; fi) \
+	    $$(if [ -n "$$(${MAKE} -C ${PLUGIN_DIR} -v PLUGIN_OBSOLETE)" ]; then echo "(pending removal)"; fi)
 .endfor
 
-# shared targets that are sane to run from the root directory
-TARGETS=	clean lint style style-fix style-python sweep test
+# known good targets (expanded below)
+TARGETS=	clean glint lint revision style sweep test
 
-.for TARGET in ${TARGETS}
-${TARGET}:
-.  for PLUGIN_DIR in ${PLUGIN_DIRS}
-	@${MAKE} -C ${PLUGIN_DIR} ${TARGET}
-.  endfor
+.for _TARGET in ${.TARGETS}
+__TARGET=	${TARGETS:M${_TARGET:C/-.*//}}
+.  if "${__TARGET}" != ""
+${_TARGET}:
+.    for PLUGIN_DIR in ${PLUGIN_DIRS}
+	@echo ">>> Entering ${PLUGIN_DIR} with target '${_TARGET}'"
+	@${MAKE} -C ${PLUGIN_DIR} ${_TARGET}
+.    endfor
+.  endif
 .endfor
-
-ARGS=	diff mfc
-
-# handle argument expansion for required targets
-.for TARGET in ${.TARGETS}
-_TARGET=		${TARGET:C/\-.*//}
-.if ${_TARGET} != ${TARGET}
-.for ARGUMENT in ${ARGS}
-.if ${_TARGET} == ${ARGUMENT}
-${_TARGET}_ARGS+=	${TARGET:C/^[^\-]*(\-|\$)//:S/,/ /g}
-${TARGET}: ${_TARGET}
-.endif
-.endfor
-${_TARGET}_ARG=		${${_TARGET}_ARGS:[0]}
-.endif
-.endfor
-
-diff:
-	@git diff --stat -p stable/${PLUGIN_ABI} ${.CURDIR}/${diff_ARGS:[1]}
-
-mfc:
-	@git checkout stable/${PLUGIN_ABI}
-.for MFC in ${mfc_ARGS}
-	@git cherry-pick -x ${MFC}
-.endfor
-	@git checkout master
 
 license:
 	@${.CURDIR}/Scripts/license . > ${.CURDIR}/LICENSE
 
-.PHONY: license
+readme.md:
+	@MAKE=${MAKE} Scripts/update-list.sh
+
+sync: readme.md license
+
+.PHONY: license readme.md sync
