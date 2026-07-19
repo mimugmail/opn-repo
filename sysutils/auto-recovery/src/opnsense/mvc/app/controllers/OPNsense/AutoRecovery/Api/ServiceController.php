@@ -64,7 +64,7 @@ class ServiceController extends ApiMutableServiceControllerBase
         $countdown = 60 * (string)$model->general->countdown;
 
         $backend = new Backend();
-        $response = $backend->configdRun("autorecovery countdown ${action} ${configdcmd} ${countdown}");
+        $response = $backend->configdRun("autorecovery countdown {$action} {$configdcmd} {$countdown}");
         return array("response" => $response);
     }
 
