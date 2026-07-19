@@ -1,0 +1,16 @@
+<metadata>
+    <ipcheck>
+        <filename>Ipcheck.js</filename>
+        <endpoints>
+            <endpoint>/api/ipcheck/run/status</endpoint>
+        </endpoints>
+        <translations>
+            <title>IP Check</title>
+            <rows>Rows to display</rows>
+            <address>Public IP address</address>
+            <isp>Internet provider</isp>
+            <vpn>VPN/Proxy/TOR</vpn>
+            <risk>Risk score</risk>
+        </translations>
+    </ipcheck>
+</metadata>

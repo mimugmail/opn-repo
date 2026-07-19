@@ -21,21 +21,49 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-PYTHON_PKG_NAME=$(pkg info -x 'python3*' | grep 'python3' | sed -n 's/^python\([0-9]*\).*/py\1-speedtest-cli/p')
+BASE_PY_VER=$(pkg info -x 'python3*' | grep 'python3' | sed -n 's/^python3\([0-9]*\).*/\1/p')
+BASE_PY_VER=${BASE_PY_VER:-999}
+
+# Find the newest py3<ver>-speedtest-cli flavor that is actually published in the
+# configured repositories, walking down from the base python3 version. This
+# covers the window right after a FreeBSD default python3 bump (e.g. 311 -> 313)
+# where the ports tree hasn't cut every py3xx flavor of net/py-speedtest-cli yet.
+find_speedtest_pkg() {
+  for ver in 313 312 311 310 39; do
+    if [ "${ver}" -gt "${BASE_PY_VER}" ]; then
+      continue
+    fi
+    if pkg search -qe "^py3${ver}-speedtest-cli-" > /dev/null 2>&1; then
+      echo "py3${ver}-speedtest-cli"
+      return 0
+    fi
+  done
+  return 1
+}
+
+PYTHON_PKG_NAME=$(find_speedtest_pkg)
 OOKLA_URL=$(curl -s "https://www.speedtest.net/apps/cli" | xmllint --html --xpath "string(//*[@id='freebsd']/pre/code[7]/text())" - 2>/dev/null | awk -F'"' '{print $2}')
 
-if [ $1 = 'http' ] 
-then 
+if [ "$1" = 'http' ]
+then
+  if [ -z "${PYTHON_PKG_NAME}" ]; then
+    echo "No matching py3xx-speedtest-cli package is available in the configured repositories." >&2
+    exit 1
+  fi
   pkg delete -y speedtest
   pkg install -f -y ${PYTHON_PKG_NAME}
-elif [ $1 = 'socket' ] 
-then 
-  pkg delete -y ${PYTHON_PKG_NAME}
+elif [ "$1" = 'socket' ]
+then
+  if [ -n "${PYTHON_PKG_NAME}" ]; then
+    pkg delete -y ${PYTHON_PKG_NAME}
+  fi
   pkg install -y libidn2
   pkg add -f ${OOKLA_URL}
-elif [ $1 = 'delete' ]
+elif [ "$1" = 'delete' ]
 then
   pkg delete -y speedtest
-  pkg delete -y ${PYTHON_PKG_NAME}
+  if [ -n "${PYTHON_PKG_NAME}" ]; then
+    pkg delete -y ${PYTHON_PKG_NAME}
+  fi
 fi
 
