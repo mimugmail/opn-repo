@@ -20,7 +20,7 @@ $(document).ready(function() {
 	$('.glyphicon.glyphicon-fire').addClass('fa fa-route-highway').removeClass('glyphicon glyphicon-fire');
 	$('.fa-support').addClass('fa fa-question-circle').removeClass('fa-support');
 	$('.fa-plug').addClass('fa fa-plug')
-	$('.fa').addClass('fal fa-lg').removeClass('fa');
+	$('.fa').addClass('fal fa-sm').removeClass('fa');
 });
 
 function getTheme() {
