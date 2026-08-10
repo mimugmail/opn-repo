@@ -64,13 +64,25 @@
     <div class="content-box-main collapse in" id="system_information-container" style="display:inline">
         <table class="table table-condensed">
             <thead>
-                <tr id="canruntests" style="display:none">
+                <tr class="canruntests" style="display:none">
                     <td style="width:35%">
-                        <select id="speedlist" name="serverid">
-                        <option value="0">Fetching available Speedtest servers...</option>
-                        /select>
+                        <select id="speedlist" class="form-control">
+                            <option value="">{{ lang._('automatic (nearest server)') }}</option>
+                        </select>
                     </td>
-                    <td ><button class="btn btn-primary" id="reportAct" type="button">
+                    <td><button class="btn btn-default" id="serverlistAct" type="button">
+                <b>{{ lang._('Get server list') }}</b> <i id="serverlistAct_progress"></i></button></td>
+                </tr>
+                <tr class="canruntests" style="display:none">
+                    <td>
+                        <input type="text" id="serverid" name="serverid" class="form-control"
+                               inputmode="numeric" placeholder="{{ lang._('server id (optional)') }}">
+                        <small class="text-muted">
+                            {{ lang._('Leave empty to let speedtest pick the nearest server, or enter the id of a specific server. "Get server list" fills the list above with the nearest servers; ids of servers further away can be looked up on speedtest.net.') }}
+                        </small>
+                        <small id="serverid_error" class="text-danger" style="display:none"></small>
+                    </td>
+                    <td><button class="btn btn-primary" id="reportAct" type="button">
                 <b>{{ lang._('run speedtest') }}</b> <i id="reportAct_progress"></i></button></td>
                 </tr>
                 <tr>
@@ -195,13 +207,34 @@
             $('#log_block').html(obj);
         });
     };
+    function serverlist_reload() {
+        $("#serverlistAct_progress").addClass("fa fa-spinner fa-pulse");
+        ajaxCall(url = "/api/speedtest/service/serverlist", sendData = {}, callback = function(l, status) {
+            $("#serverlistAct_progress").removeClass("fa fa-spinner fa-pulse");
+            var selected = $('#serverid').val().trim();
+            $('#speedlist').empty().append($('<option/>').val("").text("{{ lang._('automatic (nearest server)') }}"));
+            if (Array.isArray(l) && l.length > 0) {
+                for (var i = 0; i < l.length; i++) {
+                    $('#speedlist').append($('<option/>').val(l[i].id)
+                        .text("(" + l[i].id + ") " + l[i].name + ", " + l[i].location));
+                }
+            } else {
+                $('#speedlist').append($('<option/>').val("").prop("disabled", true)
+                    .text(l && l.error ? l.error : "{{ lang._('no servers returned') }}"));
+            }
+            // keep a manually entered id selected when it is part of the fetched list
+            if (/^\d+$/.test(selected) && $('#speedlist option[value="' + selected + '"]').length > 0) {
+                $('#speedlist').val(selected);
+            }
+        });
+    };
     function version_reload() {
         ajaxCall(url = "/api/speedtest/service/version", sendData = {}, callback = function(l, status) {
             $('#checkingspeedtest').hide();
             if (l.version=='none') {
                 $('#nospeedtest').show("div");
             } else {
-                $('#canruntests').show();
+                $('.canruntests').show();
                 $('#version').text(l.message);
                 if (l.version=='binary') {
                     $('#bin1Act').addClass('btn-success disabled')
@@ -214,13 +247,6 @@
                     $('#bin1Act').removeClass('btn-success disabled')
                     $('#bin1Act').addClass('btn-primary')
                 }
-                
-                ajaxCall(url = "/api/speedtest/service/serverlist", sendData = {}, callback = function(l, status) {
-                    $('#speedlist').text("")
-                    for (var i = 0; i < l.length; i++) {
-                        $('#speedlist').append("<option value=\"" + l[i].id + "\">" + "(" + l[i].id + ") " + l[i].name + ", " + l[i].location + "<\/option>");
-                    }
-                });
             }
             });
     };
@@ -238,33 +264,48 @@
             ajaxCall(url = "/api/speedtest/service/installhttp/", sendData = {}, callback = function(r, status) {
                 version_reload();
                 $('#nospeedtest').hide();
-                $('#canruntests').show();
+                $('.canruntests').show();
             });
         });
         $("#binAct").click(function() {
             ajaxCall(url = "/api/speedtest/service/installsocket/", sendData = {}, callback = function(r, status) {
                 version_reload();
                 $('#nospeedtest').hide();
-                $('#canruntests').show();
+                $('.canruntests').show();
             });
         });
         $("#cli1Act").click(function() {
             ajaxCall(url = "/api/speedtest/service/installhttp/", sendData = {}, callback = function(r, status) {
                 version_reload();
                 $('#nospeedtest').hide();
-                $('#canruntests').show();
+                $('.canruntests').show();
             });
         });
         $("#bin1Act").click(function() {
             ajaxCall(url = "/api/speedtest/service/installsocket/", sendData = {}, callback = function(r, status) {
                 version_reload();
                 $('#nospeedtest').hide();
-                $('#canruntests').show();
+                $('.canruntests').show();
             });
         });
+        // fetch the list of nearest servers on demand
+        $("#serverlistAct").click(function() {
+            serverlist_reload();
+        });
+        // picking a server from the list fills the (optional) server id field
+        $("#speedlist").change(function() {
+            $('#serverid').val($(this).val());
+            $('#serverid_error').hide();
+        });
         $("#reportAct").click(function() {
+            var serverid = $('#serverid').val().trim();
+            if (serverid !== '' && !/^\d+$/.test(serverid)) {
+                $('#serverid_error').text("{{ lang._('Please enter a numeric server id or leave the field empty.') }}").show();
+                return;
+            }
+            $('#serverid_error').hide();
             $("#reportAct_progress").addClass("fa fa-spinner fa-pulse");
-            ajaxCall(url = "/api/speedtest/service/run/" + $('#speedlist').val(), sendData = {}, callback = function(r, status) {
+            ajaxCall(url = "/api/speedtest/service/run/" + (serverid === '' ? '0' : serverid), sendData = {}, callback = function(r, status) {
                 $("#reportAct_progress").removeClass("fa fa-spinner fa-pulse");
                 $("#test_results").attr("style", "display:content");
                 if (r.error) {

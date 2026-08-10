@@ -44,6 +44,13 @@ class ServiceController extends ApiControllerBase
 
     public function runAction($serverid = 0)
     {
+        $serverid = trim((string)$serverid);
+        if ($serverid === '') {
+            $serverid = '0';
+        }
+        if (!preg_match('/^\d+$/', $serverid)) {
+            return ['error' => sprintf(gettext('%s is not a valid server id'), $serverid)];
+        }
         return (new Backend())->configdpRun("speedtest run", [$serverid]);
     }
 
