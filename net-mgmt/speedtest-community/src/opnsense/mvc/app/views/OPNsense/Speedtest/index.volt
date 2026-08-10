@@ -233,6 +233,8 @@
             $('#checkingspeedtest').hide();
             if (l.version=='none') {
                 $('#nospeedtest').show("div");
+            } else if (l.error) {
+                $('#version').text(l.error);
             } else {
                 $('.canruntests').show();
                 $('#version').text(l.message);

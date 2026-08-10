@@ -89,6 +89,13 @@ try:
             #from timestamp to visual form
             row[0]=datetime.fromtimestamp(float(row[0])).isoformat()
         f.close()
+        # nothing logged yet; return the keys the dashboard widget reads so it
+        # doesn't render 'undefined'
+        if not row:
+            out = {'date':'', 'server':'', 'download':'', 'upload':'', 'latency':'', 'url':'',
+                   'error':'No speedtest results yet'}
+            print(json.dumps(out))
+            quit()
         out = {
             'date': str(row[0]),
             'server': row[2] + " " + row[3],
@@ -155,12 +162,15 @@ try:
     version = subprocess.run([speedtest, "--version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8')
     bin_version = version.find("Ookla")>0
 
-    # parameter v or version - returning the version string 
+    # parameter v or version - returning the version string
     if arg=='v' or arg == 'version':
+        # speedtest-cli reports itself over two lines, the binary over one; don't
+        # assume how many lines are there, warnings can end up in the output too
+        lines = [line for line in version.splitlines() if line.strip()]
         if bin_version:
-            out={"version":"binary", "message":version.splitlines()[0]}
+            out={"version":"binary", "message":lines[0]}
         else:
-            out={"version":"cli", "message":version.splitlines()[0]+' '+version.splitlines()[1]}
+            out={"version":"cli", "message":' '.join(lines[:2])}
         print(json.dumps(out))
         quit()
 
@@ -170,7 +180,7 @@ try:
         if bin_version:
             # when binary, we cut out the lat and lon of the server for consistency
             cmd = [speedtest, '--accept-license', '--accept-gdpr', '--servers', '-fjsonl']
-            serverlist = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8').splitlines()
+            serverlist = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True).stdout.decode('utf-8').splitlines()
             for line in serverlist:
                 tt = json.loads(line)
                 out = {'id':str(tt['id']), 'name':tt['name'], 'location':tt['location'], 'country':tt['country']}
@@ -178,9 +188,9 @@ try:
         else:
             # when http, we reassemble the json from the text output; speedtest-cli can't return json list of servers
             cmd = [speedtest, '--list']
-            serverlist = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8').splitlines()
+            serverlist = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True).stdout.decode('utf-8').splitlines()
             for line in serverlist[1:11]:
-                rec = re.split("\) | \(|, ", line)
+                rec = re.split(r"\) | \(|, ", line)
                 out = {'id':rec[0].strip(), "name":rec[1].strip(), "location":rec[2].strip()+", "+rec[3], "country":rec[4].strip()}
                 array.append(out)
         print(json.dumps(array))
@@ -202,7 +212,9 @@ try:
         out={'error': str(arg)+" is invalid server id"}
         print(json.dumps(out))
         quit()
-    result = json.loads(subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8'))
+    # keep stderr out of stdout, otherwise a warning or progress line from
+    # speedtest ends up in the json we are about to parse
+    result = json.loads(subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True).stdout.decode('utf-8'))
     # assembling the output json to be consistent regarless of what came back from speedtest
     out = {}
     if bin_version:
@@ -225,8 +237,9 @@ try:
         out['download'] = round(result['download']/1000000,2)
         out['upload'] = round(result['upload']/1000000,2)
         out['link'] = result['share'][:-4]
-    # datetime in CSV uses different format
-    csvtime = datetime.strptime(out['timestamp'], "%Y-%m-%dT%H:%M:%SZ").timestamp()
+    # datetime in CSV uses different format; cut the string down to seconds so
+    # fractional seconds or a timezone offset don't break the conversion
+    csvtime = datetime.strptime(out['timestamp'][:19], "%Y-%m-%dT%H:%M:%S").timestamp()
     newrow = [csvtime, out['clientip'], out['serverid'], out['servername'], out['country'], out['download'], out['upload'], out['latency'], out['link']] 
     # writing the newrow into csv
     f = open(csvfile, 'a', encoding="utf-8")
@@ -235,9 +248,28 @@ try:
     f.close()
     # returning the assembled json for further processing
     print(json.dumps(out), file=sys.stdout)
-except OSError or IOError:
+except FileNotFoundError:
     out={'version':'none', 'message':'No speedtest package installed'}
     print(json.dumps(out))
 except subprocess.CalledProcessError as e:
-    out={'error':'Speedtest server id '+str(arg)+" not recognized."}
+    # report what speedtest actually complained about instead of guessing;
+    # e.stderr is set when stderr was piped, e.output when it was merged
+    detail=''
+    for stream in (e.stderr, e.output):
+        if stream:
+            lines=[line.strip() for line in stream.decode('utf-8','replace').splitlines() if line.strip()]
+            if lines:
+                detail=lines[-1]
+                break
+    if not detail:
+        detail='exit code '+str(e.returncode)
+    if is_int(arg) and arg!='0':
+        out={'error':'Speedtest with server id '+str(arg)+' failed: '+detail}
+    else:
+        out={'error':'Speedtest failed: '+detail}
+    print(json.dumps(out))
+except Exception as e:
+    # never exit non-zero, configd only logs a traceback and the UI is left
+    # without a message; return the reason as json instead
+    out={'error':'Speedtest failed: '+type(e).__name__+': '+str(e)}
     print(json.dumps(out))
