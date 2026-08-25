@@ -1,0 +1,23 @@
+I was actually able to bring back Unifi 9:
+
+pkg update -f
+pkg install -y -U os-unifi9-maxit
+service unifi start
+Installed versions:
+
+ os-unifi9-maxit-1.4
+ unifi9-9.5.21_3
+ mongodb70-7.0.37
+ openjdk17-17.0.18+8.1
+And running version:
+
+# curl -sk https://10.0.0.1:8443/status
+{"meta":{"rc":"ok","up":true,"server_version":"9.5.21","uuid":"5236bf6c-21c1-4701-8f1b-a6f07f8a1d35"},"data":[]}
+Once it was all up and running again, I upgraded to Unifi 10 by switching packages:
+
+service unifi stop
+pkg delete -y os-unifi9-maxit unifi9
+pkg install -n -U os-unifi-maxit  # dry run
+pkg install -y -U os-unifi-maxit
+service unifi start
+All up and running now.
