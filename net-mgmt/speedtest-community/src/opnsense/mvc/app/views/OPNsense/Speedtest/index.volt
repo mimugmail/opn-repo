@@ -1,4 +1,4 @@
-{# Copyright 2021 Miha Kralj 
+{# Copyright 2021 Miha Kralj
 *    Redistribution and use in source and binary forms, with or without
 *    modification, are permitted provided that the following conditions are met:
 *
@@ -87,9 +87,9 @@
                 </tr>
                 <tr>
                     <div id="checkingspeedtest">&nbsp;&nbsp;Locating speedtest module...</div>
-                    <div id="nospeedtest" style="display:none">&nbsp;&nbsp;No installed speedtest modules found. Install 
+                    <div id="nospeedtest" style="display:none">&nbsp;&nbsp;No installed speedtest modules found. Install
                         <button class="btn btn-xs btn-primary" id="cliAct" type="button"><b>speedtest-cli</b><i id="cliAct_progress"></i></button>
-                    or 
+                    or
                         <button class="btn btn-xs btn-primary" id="binAct" type="button"><b>Ookla</b><i id="binAct_progress"></i></button>
                     </div>
                 </tr>
@@ -195,8 +195,9 @@
     };
     function log_reload() {
         ajaxCall(url = "/api/speedtest/service/showlog", sendData = {}, callback = function(l, status) {
+            var obj = "";
             for (var i = 0; i < l.length; i++) {
-                var obj = obj +
+                obj = obj +
                     "<tr><td class=\"text-left\" style=\"\">" + l[i][0] + "</td>" +
                     "<td class=\"text-left\" style=\"\">" + l[i][2] + "</td>" +
                     "<td class=\"text-left\" style=\"\">" + l[i][3] + "</td>" +
@@ -261,6 +262,16 @@
 
     });
     $(function() {
+        // Show/hide the log table (previously relied on core data-advanced
+        // toggling, which no longer fires on OPNsense 26.7)
+        $("#show_advanced_log").off('click').on('click', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var show = !$('#log_block').is(':visible');
+            $('#log_head, #log_block, #exportlog_button, #clearlog_button').toggle(show);
+            this.className = show ? 'fa fa-toggle-on text-success' : 'fa fa-toggle-off text-danger';
+            $('#togglelog').text(show ? 'hide log' : 'show log');
+        });
         // pressing button
         $("#cliAct").click(function() {
             ajaxCall(url = "/api/speedtest/service/installhttp/", sendData = {}, callback = function(r, status) {
@@ -347,4 +358,3 @@
     });
 
 </script>
-
