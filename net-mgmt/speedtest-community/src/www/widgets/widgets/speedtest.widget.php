@@ -29,7 +29,8 @@ require_once("guiconfig.inc");
 <script>
     $(document).ready(function() {
         ajaxGet("/api/speedtest/service/showrecent", {}, function(l,status) {
-			$('#stat_recent').html("<a href='" + l.url + "' target='_blank'>"+l.date+"</a> <b>Down: "+l.download+" Mbps<\/b><small> (up: "+l.upload+" Mbps, latency: "+l.latency +" ms)</small>");
+			var date = l.url ? "<a href='" + l.url + "' target='_blank'>"+l.date+"</a>" : l.date;
+			$('#stat_recent').html(date + " <b>Down: "+l.download+" Mbps<\/b><small> (up: "+l.upload+" Mbps, latency: "+l.latency +" ms)</small>");
 		});
         ajaxGet("/api/speedtest/service/showstat", {}, function(l,status) {
             $('#stat_samples').html("<b>"+l.samples+"<\/b>");

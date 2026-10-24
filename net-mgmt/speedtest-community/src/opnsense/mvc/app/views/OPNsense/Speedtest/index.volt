@@ -151,12 +151,12 @@
         <thead>
             <tr>
                 <th style="text-align:left">
-                    <a href="#"><i class="fa fa-toggle-off text-danger" id="show_advanced_log"></i></a>
+                    <a href="#" id="toggle_log"><i class="fa fa-toggle-off text-danger"></i></a>
                     <small id="togglelog">show log</small>
                 </th>
             </tr>
             <tr><th>
-                <div id="exportlog_button" data-advanced="true" style="display: none;">
+                <div id="exportlog_button" class="speedtest-log" style="display: none;">
                     <a href="/api/speedtest/download/csv">
                         <button class="btn btn-sm btn-primary" id="downloadAct" type="button">
                             <b>Export log</b>
@@ -165,12 +165,12 @@
                 </div>
             </th>
             <th>
-                <div id="clearlog_button" data-advanced="true" style="display: none;">
+                <div id="clearlog_button" class="speedtest-log" style="display: none;">
                     <button class="btn  btn-sm btn-primary" id="deletelogAct" type="button">
                         <b>{{ lang._('Clear log') }}</b> <i id="deletelogAct_progress"></i></button>
                 </div>
             </th></tr>
-            <tr id="log_head" data-advanced="true" style="display: none;">
+            <tr id="log_head" class="speedtest-log" style="display: none;">
                 <th data-column-id="Timestamp" class="text-left" style="width:7em;">Timestamp (GMT)</th>
                 <th data-column-id="ServerId" class="text-left" style="width:3em;">Server id</th>
                 <th data-column-id="ServerName" class="text-left" style="width:12em;">Server name</th>
@@ -179,7 +179,7 @@
                 <th data-column-id="UlSpeed" class="text-left" style="width:3em;">Latency</th>
             </tr>
         </thead>
-        <tbody id="log_block" data-advanced="true" style="display: none;">
+        <tbody id="log_block" class="speedtest-log" style="display: none;">
         </tbody>
     </table>
 </div>
@@ -195,8 +195,9 @@
     };
     function log_reload() {
         ajaxCall(url = "/api/speedtest/service/showlog", sendData = {}, callback = function(l, status) {
+            var obj = '';
             for (var i = 0; i < l.length; i++) {
-                var obj = obj +
+                obj +=
                     "<tr><td class=\"text-left\" style=\"\">" + l[i][0] + "</td>" +
                     "<td class=\"text-left\" style=\"\">" + l[i][2] + "</td>" +
                     "<td class=\"text-left\" style=\"\">" + l[i][3] + "</td>" +
@@ -261,6 +262,13 @@
 
     });
     $(function() {
+        // show/hide the log; core's advanced mode toggle only handles elements inside a form
+        $("#toggle_log").click(function(e) {
+            e.preventDefault();
+            var icon = $(this).find('i');
+            icon.toggleClass("fa-toggle-on fa-toggle-off").toggleClass("text-success text-danger");
+            $('.speedtest-log').toggle(icon.hasClass("fa-toggle-on"));
+        });
         // pressing button
         $("#cliAct").click(function() {
             ajaxCall(url = "/api/speedtest/service/installhttp/", sendData = {}, callback = function(r, status) {
@@ -327,7 +335,11 @@
                     $("#ISP2").text(r.servername);
                     $("#ISP3").text(r.country);
                     $("#client").text(r.clientip);
-                    $("#result").html("<a href=\"" + r.link + "\"  target=\"_blank\">" + r.link + "</a>");
+                    if (r.link) {
+                        $("#result").empty().append($('<a target="_blank"/>').attr('href', r.link).text(r.link));
+                    } else {
+                        $("#result").text("{{ lang._('not shared') }}");
+                    }
                 }
                 stat_reload();
                 log_reload();
