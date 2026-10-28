@@ -1,8 +1,87 @@
 <model>
     <mount>//OPNsense/speedtest</mount>
+    <version>1.0.0</version>
     <description>
         Speedtest plugin
     </description>
     <items>
+        <shaper>
+            <enabled type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </enabled>
+            <interface type="InterfaceField">
+                <Default>wan</Default>
+                <Required>Y</Required>
+            </interface>
+            <dsltype type="OptionField">
+                <Default>none</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <none>Ethernet, fibre, cable</none>
+                    <ptm>VDSL2 (PTM)</ptm>
+                    <atm>ADSL (ATM)</atm>
+                </OptionValues>
+            </dsltype>
+            <schedule type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </schedule>
+            <frequency type="IntegerField">
+                <Default>3</Default>
+                <Required>Y</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>6</MaximumValue>
+                <ValidationMessage>The frequency must be between 1 and 6 speedtests.</ValidationMessage>
+            </frequency>
+            <offset type="IntegerField">
+                <Default>3</Default>
+                <Required>Y</Required>
+                <MinimumValue>0</MinimumValue>
+                <MaximumValue>59</MaximumValue>
+                <ValidationMessage>The offset must be between 0 and 59 minutes.</ValidationMessage>
+            </offset>
+            <multiple type="IntegerField">
+                <Default>3</Default>
+                <Required>Y</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>5</MaximumValue>
+                <ValidationMessage>The number of speedtests must be between 1 and 5.</ValidationMessage>
+            </multiple>
+            <threshold_down type="IntegerField">
+                <Default>90</Default>
+                <Required>Y</Required>
+                <MinimumValue>50</MinimumValue>
+                <MaximumValue>100</MaximumValue>
+                <ValidationMessage>The threshold must be between 50 and 100 percent.</ValidationMessage>
+            </threshold_down>
+            <threshold_up type="IntegerField">
+                <Default>90</Default>
+                <Required>Y</Required>
+                <MinimumValue>50</MinimumValue>
+                <MaximumValue>100</MaximumValue>
+                <ValidationMessage>The threshold must be between 50 and 100 percent.</ValidationMessage>
+            </threshold_up>
+            <days type="IntegerField">
+                <Default>1</Default>
+                <Required>Y</Required>
+                <MinimumValue>1</MinimumValue>
+                <MaximumValue>30</MaximumValue>
+                <ValidationMessage>The number of days must be between 1 and 30.</ValidationMessage>
+            </days>
+            <minchange type="IntegerField">
+                <Default>2</Default>
+                <Required>Y</Required>
+                <MinimumValue>0</MinimumValue>
+                <MaximumValue>100</MaximumValue>
+                <ValidationMessage>The minimum change must be between 0 and 100 percent.</ValidationMessage>
+            </minchange>
+            <!-- internal: interface address the shaper rules exclude, kept current by "speedtest syncshaper" -->
+            <address type="NetworkField">
+                <Required>N</Required>
+                <NetMaskAllowed>N</NetMaskAllowed>
+                <AddressFamily>ipv4</AddressFamily>
+            </address>
+        </shaper>
     </items>
 </model>

@@ -42,7 +42,10 @@ find_speedtest_pkg() {
 }
 
 PYTHON_PKG_NAME=$(find_speedtest_pkg)
-OOKLA_URL=$(curl -s "https://www.speedtest.net/apps/cli" | xmllint --html --xpath "string(//*[@id='freebsd']/pre/code[7]/text())" - 2>/dev/null | awk -F'"' '{print $2}')
+# Ookla's last FreeBSD CLI release (1.2.0) is built for FreeBSD 12 and 13, x86_64 only;
+# the FreeBSD 13 build runs on later releases. A fixed URL instead of scraping the
+# download page, which silently installed nothing when the page changed.
+OOKLA_URL="https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-freebsd13-x86_64.pkg"
 
 if [ "$1" = 'http' ]
 then
@@ -54,11 +57,16 @@ then
   pkg install -f -y ${PYTHON_PKG_NAME}
 elif [ "$1" = 'socket' ]
 then
-  if [ -n "${PYTHON_PKG_NAME}" ]; then
-    pkg delete -y ${PYTHON_PKG_NAME}
-  fi
-  pkg install -y libidn2
-  pkg add -f ${OOKLA_URL}
+  case "$(uname -m)" in
+  amd64|x86_64) ;;
+  *) echo "Ookla provides FreeBSD builds for x86_64 only, not $(uname -m)."; exit 1 ;;
+  esac
+  # replaces speedtest-cli, which installs a "speedtest" command as well
+  for pkgname in $(pkg query '%n' | grep -E '^py3[0-9]+-speedtest-cli$'); do
+    pkg delete -y ${pkgname}
+  done
+  pkg install -y libidn2 || exit 1
+  pkg add -f ${OOKLA_URL} || exit 1
 elif [ "$1" = 'delete' ]
 then
   pkg delete -y speedtest

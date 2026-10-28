@@ -1,0 +1,44 @@
+<form>
+    <field>
+        <id>speedtest.shaper.enabled</id>
+        <label>Enable traffic shaper</label>
+        <type>checkbox</type>
+        <help>Adds scheduled task to cron</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.interface</id>
+        <label>WAN interface</label>
+        <type>dropdown</type>
+        <help>Creates default pipes, queues and rules to shape LAN to WAN traffic. Will automatically detect and update existing pipes assigned to WAN interface</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.dsltype</id>
+        <label>WAN type</label>
+        <type>dropdown</type>
+        <help>Line type of the WAN. On DSL the upload pipe keeps room for the line overhead of the ACKs of downloads (large on ADSL), and the CoDel target counts the DSL framing. The MTU is read from the WAN interface</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.threshold_down</id>
+        <label>Download threshold (%)</label>
+        <type>text</type>
+        <help>Recommended to set the download pipe to 90% of the speedtest result</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.threshold_up</id>
+        <label>Upload threshold (%)</label>
+        <type>text</type>
+        <help>Recommended to set the upload pipe to 90% of the speedtest result</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.days</id>
+        <label>Days of results</label>
+        <type>text</type>
+        <help>Days of speedtest results to use. Each hour counts with its best result and each day with its best hour, so slow servers and busy hours are left out; a result far above the others of its hour (more than 25% above their median), or an hour far above the other hours of its day, is a measuring error and left out too. The thresholds apply to that best result. A pipe is lowered from the best day of these days, so a line that resyncs lower is followed the next morning, and raised to the lowest best day of twice as many days (at least two), never above the lowering figure, so it rises after two good days in a row</help>
+    </field>
+    <field>
+        <id>speedtest.shaper.minchange</id>
+        <label>Minimum change (%)</label>
+        <type>text</type>
+        <help>A pipe is lowered at once when its figure is at least this percentage below it. It is raised at once to its figure when that is at least a quarter of this above it, but not by the daily update on the date after it was lowered (Apply now is not held)</help>
+    </field>
+</form>

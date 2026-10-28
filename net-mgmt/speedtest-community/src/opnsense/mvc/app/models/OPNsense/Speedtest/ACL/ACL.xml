@@ -5,4 +5,10 @@
             <pattern>api/speedtest/service/*</pattern>
         </patterns>
     </page-reporting-speedtest>
+    <page-reporting-speedtest-shaper>
+        <name>Monitoring: Speedtest: Traffic shaper</name>
+        <patterns>
+            <pattern>api/speedtest/shaper/*</pattern>
+        </patterns>
+    </page-reporting-speedtest-shaper>
 </acl>

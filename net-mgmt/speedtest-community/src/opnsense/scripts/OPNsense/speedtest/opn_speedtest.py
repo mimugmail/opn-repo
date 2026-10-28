@@ -40,6 +40,10 @@ from os import path
 
 # A wrapper around speedtest.py CLI: get arrguments (if any), run the test,
 # store it in cvs, mirror the output that came from the test
+def ookla_supported():
+    # Ookla publishes its FreeBSD CLI for x86_64 only
+    return os.uname().machine in ('amd64', 'x86_64')
+
 def is_int (n):
     try:
         int(n)
@@ -102,7 +106,7 @@ try:
             'download': row[5],
             'upload': row[6],
             'latency': row[7],
-            'url': row[8]
+            'url': row[8] if len(row) > 8 else ''
         }
         print(json.dumps(out))
         quit()
@@ -160,17 +164,23 @@ try:
 
     # checking the version of speedtest
     version = subprocess.run([speedtest, "--version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.decode('utf-8')
-    bin_version = version.find("Ookla")>0
+    bin_version = "Ookla" in version
 
     # parameter v or version - returning the version string
     if arg=='v' or arg == 'version':
         # speedtest-cli reports itself over two lines, the binary over one; don't
         # assume how many lines are there, warnings can end up in the output too
-        lines = [line for line in version.splitlines() if line.strip()]
+        lines = [line.strip() for line in version.splitlines() if line.strip()]
+        # show the tool and its version; the build hash and the OS the binary
+        # reports are kept in "raw" only
         if bin_version:
-            out={"version":"binary", "message":lines[0]}
+            line = next((l for l in lines if "Ookla" in l), lines[0])
+            name = re.match(r"^(.*?Ookla\s+[\d.]+)", line)
+            out={"version":"binary", "message":name.group(1) if name else line, "raw":line}
         else:
-            out={"version":"cli", "message":' '.join(lines[:2])}
+            line = next((l for l in lines if l.startswith("speedtest-cli")), lines[0])
+            out={"version":"cli", "message":line, "raw":' '.join(lines[:2])}
+        out['supported'] = ookla_supported()
         print(json.dumps(out))
         quit()
 
@@ -213,8 +223,25 @@ try:
         print(json.dumps(out))
         quit()
     # keep stderr out of stdout, otherwise a warning or progress line from
-    # speedtest ends up in the json we are about to parse
-    result = json.loads(subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True).stdout.decode('utf-8'))
+    # speedtest ends up in the json we are about to parse; the binary can still
+    # print {"type":"log",...} lines or a bare {"error":...} on stdout
+    proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    result = None
+    for line in proc.stdout.decode('utf-8').splitlines():
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(rec, dict) or rec.get('type') == 'log':
+            continue
+        if 'error' in rec:
+            print(json.dumps({'error': 'Speedtest failed: ' + str(rec['error'])}))
+            quit()
+        if rec.get('type', 'result') == 'result':
+            result = rec
+    if result is None:
+        print(json.dumps({'error': 'Speedtest failed: no result in output'}))
+        quit()
     # assembling the output json to be consistent regarless of what came back from speedtest
     out = {}
     if bin_version:
@@ -226,7 +253,8 @@ try:
         out['latency'] = round(result['ping']['latency'],2)
         out['download'] = round(result['download']['bandwidth']/125000,2)
         out['upload'] = round(result['upload']['bandwidth']/125000,2)
-        out['link'] = result['result']['url']
+        # the share url is missing when the result was not uploaded to speedtest.net
+        out['link'] = (result.get('result') or {}).get('url') or ''
     else:
         out['timestamp'] = result['timestamp'][:-8]+'Z'
         out['clientip'] = result['client']['ip']
@@ -236,7 +264,9 @@ try:
         out['latency'] = round(result['ping'],2)
         out['download'] = round(result['download']/1000000,2)
         out['upload'] = round(result['upload']/1000000,2)
-        out['link'] = result['share'][:-4]
+        # --share returns the url of the result image (.png); empty when sharing failed
+        share = result.get('share') or ''
+        out['link'] = share[:-4] if share.endswith('.png') else share
     # datetime in CSV uses different format; cut the string down to seconds so
     # fractional seconds or a timezone offset don't break the conversion
     csvtime = datetime.strptime(out['timestamp'][:19], "%Y-%m-%dT%H:%M:%S").timestamp()
@@ -249,7 +279,7 @@ try:
     # returning the assembled json for further processing
     print(json.dumps(out), file=sys.stdout)
 except FileNotFoundError:
-    out={'version':'none', 'message':'No speedtest package installed'}
+    out={'version':'none', 'message':'No speedtest package installed', 'supported':ookla_supported()}
     print(json.dumps(out))
 except subprocess.CalledProcessError as e:
     # report what speedtest actually complained about instead of guessing;

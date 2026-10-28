@@ -46,7 +46,8 @@ export default class Speedtest extends BaseTableWidget {
     async onWidgetTick() {
         const status_data = await this.ajaxCall('/api/speedtest/service/showstat');
         const recent_data = await this.ajaxCall('/api/speedtest/service/showrecent');
-        $('#speedtest_most_recent').html(`<a href="${recent_data['url']}" target="_blank">${recent_data['date']}</a> <strong>Down: ${recent_data['download']} Mbps</strong><br/>(up: ${recent_data['upload']} Mbps, latency: ${recent_data['latency']} ms)`);
+        let date = recent_data['url'] ? `<a href="${recent_data['url']}" target="_blank">${recent_data['date']}</a>` : recent_data['date'];
+        $('#speedtest_most_recent').html(`${date} <strong>Down: ${recent_data['download']} Mbps</strong><br/>(up: ${recent_data['upload']} Mbps, latency: ${recent_data['latency']} ms)`);
         $('#speedtest_avg_latency').html(`<strong>${status_data['latency']['avg']} ms</strong> (min: ${status_data['latency']['min']}, max: ${status_data['latency']['max']})`);
         $('#speedtest_avg_download').html(`<strong>${status_data['download']['avg']} Mbps</strong> (min: ${status_data['download']['min']}, max: ${status_data['download']['max']})`);
         $('#speedtest_avg_upload').html(`<strong>${status_data['upload']['avg']} Mbps</strong> (min: ${status_data['upload']['min']}, max: ${status_data['upload']['max']})`);
