@@ -17,6 +17,15 @@ class ServiceController extends ApiMutableServiceControllerBase
     protected static $internalServiceEnabled = 'enabled';
     protected static $internalServiceName = 'unifi';
 
+    public function statusAction()
+    {
+        $response = parent::statusAction();
+        if ($response['status'] === 'disabled' || $response['status'] === 'unknown') {
+            $response['status'] = 'stopped';
+        }
+        return $response;
+    }
+
     public function reconfigureAction()
     {
         $status = parent::reconfigureAction();
