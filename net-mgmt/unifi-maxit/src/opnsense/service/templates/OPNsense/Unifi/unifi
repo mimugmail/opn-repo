@@ -1,5 +1,6 @@
 {% if helpers.exists('OPNsense.unifi.general.enabled') and OPNsense.unifi.general.enabled == '1' %}
 unifi_enable="YES"
+unifi_javaflags="-Djava.awt.headless=true{% if not helpers.empty('OPNsense.unifi.general.jvm_max_heap') %} -Xmx{{ OPNsense.unifi.general.jvm_max_heap }}M{% else %} -Xmx1024M{% endif %}{% if helpers.exists('OPNsense.unifi.general.mongo_quiet') and OPNsense.unifi.general.mongo_quiet == '1' %} -Dunifi.db.extraargs=--quiet{% endif %}{% if not helpers.empty('OPNsense.unifi.general.port_inform') %} -Dunifi.http.port={{ OPNsense.unifi.general.port_inform }}{% endif %}{% if not helpers.empty('OPNsense.unifi.general.port_gui') %} -Dunifi.https.port={{ OPNsense.unifi.general.port_gui }}{% endif %}"
 {% else %}
 unifi_enable="NO"
 {% endif %}

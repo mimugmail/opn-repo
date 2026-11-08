@@ -7,5 +7,61 @@
             <default>0</default>
             <Required>Y</Required>
         </enabled>
+        <scheduler_enabled type="BooleanField">
+            <default>0</default>
+            <Required>Y</Required>
+        </scheduler_enabled>
+        <schedule_start_hour type="TextField">
+            <default>02:00</default>
+            <Required>N</Required>
+        </schedule_start_hour>
+        <schedule_stop_hour type="TextField">
+            <default>04:00</default>
+            <Required>N</Required>
+        </schedule_stop_hour>
+        <days_mon type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_mon>
+        <days_tue type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_tue>
+        <days_wed type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_wed>
+        <days_thu type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_thu>
+        <days_fri type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_fri>
+        <days_sat type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_sat>
+        <days_sun type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </days_sun>
+        <jvm_max_heap type="TextField">
+            <default>1024</default>
+            <Required>N</Required>
+        </jvm_max_heap>
+        <mongo_quiet type="BooleanField">
+            <default>1</default>
+            <Required>Y</Required>
+        </mongo_quiet>
+        <port_inform type="TextField">
+            <default>8080</default>
+            <Required>N</Required>
+        </port_inform>
+        <port_gui type="TextField">
+            <default>8443</default>
+            <Required>N</Required>
+        </port_gui>
     </items>
 </model>

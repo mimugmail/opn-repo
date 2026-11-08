@@ -5,4 +5,61 @@
         <type>checkbox</type>
         <help>Enable or disable Unifi Controller</help>
     </field>
+    <field>
+        <label>Scheduler</label>
+        <type>header</type>
+    </field>
+    <field>
+        <id>general.scheduler_enabled</id>
+        <label>Enable Scheduler</label>
+        <type>checkbox</type>
+        <help>Enable scheduled start and stop</help>
+    </field>
+    <field>
+        <id>general.schedule_start_hour</id>
+        <label>Start Time</label>
+        <type>text</type>
+        <help>Time to start Unifi (e.g. 02:00)</help>
+    </field>
+    <field>
+        <id>general.schedule_stop_hour</id>
+        <label>Stop Time</label>
+        <type>text</type>
+        <help>Time to stop Unifi (e.g. 04:00)</help>
+    </field>
+    <field>
+        <label>Resource Limits &amp; Logging</label>
+        <type>header</type>
+    </field>
+    <field>
+        <id>general.jvm_max_heap</id>
+        <label>JVM Memory Heap Maxx</label>
+        <type>text</type>
+        <hint>1024</hint>
+        <help>JVM Memory Heap Maxx (MB)</help>
+    </field>
+    <field>
+        <id>general.mongo_quiet</id>
+        <label>MongoDB Quiet Mode</label>
+        <type>checkbox</type>
+        <help>Suppress individual connection logging in unifi_mongod.log</help>
+    </field>
+    <field>
+        <label>Network Ports</label>
+        <type>header</type>
+    </field>
+    <field>
+        <id>general.port_inform</id>
+        <label>Device Inform Port</label>
+        <type>text</type>
+        <hint>8080</hint>
+        <help>HTTP port for AP/switch device communication (default 8080)</help>
+    </field>
+    <field>
+        <id>general.port_gui</id>
+        <label>Management Port</label>
+        <type>text</type>
+        <hint>8443</hint>
+        <help>HTTPS port to access UniFi web interface (default 8443)</help>
+    </field>
 </form>
