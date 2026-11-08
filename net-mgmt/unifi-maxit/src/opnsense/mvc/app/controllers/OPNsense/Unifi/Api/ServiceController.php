@@ -43,4 +43,22 @@ class ServiceController extends ApiMutableServiceControllerBase
         }
         return array('status' => 'failed');
     }
+
+    public function versionAction()
+    {
+        $backend = new Backend();
+        $version = trim($backend->configdRun('unifi version'));
+        $releaseUrl = '';
+        if (!empty($version) && $version !== 'unknown') {
+            $releaseUrl = 'https://community.ui.com/releases?search=UniFi+Network+Application+' . urlencode($version);
+        } else {
+            $releaseUrl = 'https://community.ui.com/releases';
+        }
+
+        return array(
+            'status' => (!empty($version) && $version !== 'unknown') ? 'ok' : 'not_found',
+            'version' => (!empty($version) && $version !== 'unknown') ? $version : null,
+            'release_url' => $releaseUrl
+        );
+    }
 }

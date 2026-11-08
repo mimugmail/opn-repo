@@ -33,10 +33,10 @@
     </field>
     <field>
         <id>general.jvm_max_heap</id>
-        <label>JVM Memory Heap Maxx</label>
+        <label>JVM Memory Heap Size</label>
         <type>text</type>
         <hint>1024</hint>
-        <help>JVM Memory Heap Maxx (MB)</help>
+        <help>JVM Memory Heap Size (MB)</help>
     </field>
     <field>
         <id>general.mongo_quiet</id>
