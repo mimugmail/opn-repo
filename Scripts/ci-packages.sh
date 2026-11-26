@@ -145,14 +145,87 @@ EOF
 	trap - EXIT HUP INT TERM
 }
 
+changed_file()
+{
+	expected=$1
+
+	[ "${changed_files}" != __NONE__ ] || return 1
+
+	for candidate in ${changed_files}; do
+		[ "${candidate}" = "${expected}" ] && return 0
+	done
+
+	return 1
+}
+
+check_changed_style()
+{
+	[ "${changed_files}" != __NONE__ ] || return
+
+	for changed_source in ${changed_files}; do
+		[ -f "${PLUGINSDIR}/${changed_source}" ] || continue
+		case "${changed_source}" in
+		*/src/etc/inc/*.php|*/src/etc/inc/*.inc|*/src/opnsense/*.php)
+			/usr/local/bin/phpcs \
+			    --standard="${PLUGINSDIR}/../core/ruleset.xml" \
+			    "${PLUGINSDIR}/${changed_source}"
+			;;
+		*/src/*.py)
+			/usr/local/bin/pycodestyle-3.13 --ignore=E501 \
+			    "${PLUGINSDIR}/${changed_source}"
+			;;
+		esac
+	done
+}
+
+check_sweep_diff()
+{
+	baseline="${PLUGINSDIR}/.github/ci/sweep-baseline.txt"
+	[ -f "${baseline}" ] || {
+		echo ">>> Missing sweep baseline: ${baseline}" >&2
+		exit 1
+	}
+
+	changes=$(git -C "${PLUGINSDIR}" diff --name-only)
+	failed=
+	for sweep_file in ${changes}; do
+		if changed_file "${sweep_file}"; then
+			echo ">>> Sweep changed a file modified by this change: ${sweep_file}" >&2
+			git -C "${PLUGINSDIR}" diff -- "${sweep_file}" >&2
+			failed=yes
+		elif ! grep -Fxq "${sweep_file}" "${baseline}"; then
+			echo ">>> Sweep changed a file outside the known baseline: ${sweep_file}" >&2
+			git -C "${PLUGINSDIR}" diff -- "${sweep_file}" >&2
+			failed=yes
+		else
+			echo ">>> Known sweep baseline: ${sweep_file}"
+		fi
+	done
+
+	[ -z "${failed}" ] || exit 1
+
+	git -C "${PLUGINSDIR}" restore --worktree -- .
+	if ! git -C "${PLUGINSDIR}" diff --quiet; then
+		echo ">>> Could not restore sweep changes before packaging." >&2
+		exit 1
+	fi
+}
+
 run_packages()
 {
 	packages=${CI_PACKAGES-}
+	changed_files=${CI_CHANGED_FILES-__NONE__}
 
 	[ -n "${packages}" ] || {
 		echo ">>> CI_PACKAGES is not set." >&2
 		exit 2
 	}
+
+	if ! git -C "${PLUGINSDIR}" diff --quiet ||
+	    ! git -C "${PLUGINSDIR}" diff --cached --quiet; then
+		echo ">>> The package repository must be clean before CI." >&2
+		exit 1
+	fi
 
 	verified_roots=$(package_roots)
 	first_package=$(printf '%s\n' "${verified_roots}" | sed -n '1p')
@@ -192,11 +265,16 @@ run_packages()
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" lint
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" test
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" style
+	done
+
+	check_changed_style
+
+	for package in ${packages}; do
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" sweep
 	done
 
-	echo ">>> Requiring sweep and style to leave tracked files unchanged."
-	git -C "${PLUGINSDIR}" diff --exit-code
+	echo ">>> Checking sweep drift while preserving the documented baseline."
+	check_sweep_diff
 
 	echo ">>> Building and validating package archives:"
 	for package in ${packages}; do

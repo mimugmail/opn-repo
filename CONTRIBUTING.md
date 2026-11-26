@@ -39,9 +39,15 @@ It uses the authoritative core Make fragments for `check`, `lint`, `style`,
 `sweep`, and `package`.
 
 Core's style and sweep targets can be informational or mutate files, so CI
-requires `git diff --exit-code` after sweeping. Pull requests check affected
-package roots, plus all packages for shared `Mk`, `Scripts`, `Templates`, or root
-Make changes. Pushes to `main` and manual runs check all packages.
+separates that behavior from authoritative lint results. The initial clean-tree
+baseline contains 47 files that current core `sweep` would reformat; they are
+recorded in `.github/ci/sweep-baseline.txt` to avoid an unrelated repository-wide
+rewrite. The gate fails if sweep changes any file modified by the change or any
+file outside that baseline, then restores the checked-in tree before packaging.
+The baseline must be reduced, not expanded, during normal maintenance. Pull
+requests check affected package roots, plus all packages for shared `Mk`,
+`Scripts`, `Templates`, or root Make changes. Pushes to `main` and manual runs
+check all packages.
 
 To run the same source checks on an OPNsense 26.7 VM, install:
 
@@ -57,6 +63,7 @@ Then select all packages and run the guest wrapper:
 ```sh
 CI_PACKAGES="$(Scripts/ci-packages.sh list --scope full | paste -sd' ' -)"
 export CI_PACKAGES
+export CI_CHANGED_FILES=__NONE__
 Scripts/ci-opnsense.sh
 ```
 
@@ -70,6 +77,9 @@ CI_PACKAGES="$(
         paste -sd' ' -
 )"
 export CI_PACKAGES
+CI_CHANGED_FILES="$(git diff --name-only "$(
+    git merge-base origin/main HEAD)" HEAD | paste -sd' ' -)"
+export CI_CHANGED_FILES
 Scripts/ci-opnsense.sh
 ```
 

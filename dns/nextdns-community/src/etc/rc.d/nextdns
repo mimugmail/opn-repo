@@ -26,4 +26,3 @@ nextdns_status()
 }
 
 run_rc_command $1
-

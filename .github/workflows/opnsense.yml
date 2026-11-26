@@ -30,19 +30,32 @@ jobs:
 
       - name: Validate CI files and select packages
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
           Scripts/ci-host-checks.sh
 
+          base_sha="${BASE_SHA}"
+          if [[ -z "${base_sha}" || "${base_sha}" =~ ^0+$ ]]; then
+            base_sha="$(git rev-parse "${HEAD_SHA}^")"
+          fi
+
+          changed_files="$(git diff --name-only "${base_sha}" "${HEAD_SHA}")"
+          if [[ -z "${changed_files}" ]]; then
+            echo "CI_CHANGED_FILES=__NONE__" >> "${GITHUB_ENV}"
+          else
+            echo "CI_CHANGED_FILES=$(printf '%s\n' "${changed_files}" |
+              paste -sd' ' -)" >> "${GITHUB_ENV}"
+          fi
+
           if [[ "${EVENT_NAME}" == "pull_request" ]]; then
             scope=changed
             packages="$(
               Scripts/ci-packages.sh list \
                 --scope "${scope}" \
-                --base "${BASE_SHA}" \
+                --base "${base_sha}" \
                 --head "${HEAD_SHA}"
             )"
           else
@@ -66,7 +79,7 @@ jobs:
           copyback: false
           mem: 6144
           cache-after-prepare: true
-          envs: CI_PACKAGES
+          envs: CI_PACKAGES CI_CHANGED_FILES
           prepare: |
             pkg update -f
             pkg upgrade -y php85
