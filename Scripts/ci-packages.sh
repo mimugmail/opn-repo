@@ -158,6 +158,23 @@ changed_file()
 	return 1
 }
 
+changed_package()
+{
+	expected=$1
+
+	[ "${changed_files}" != __NONE__ ] || return 1
+
+	for candidate in ${changed_files}; do
+		case "${candidate}" in
+		"${expected}"/*)
+			return 0
+			;;
+		esac
+	done
+
+	return 1
+}
+
 check_changed_style()
 {
 	[ "${changed_files}" != __NONE__ ] || return
@@ -277,7 +294,18 @@ run_packages()
 	check_sweep_diff
 
 	echo ">>> Building and validating package archives:"
+	package_baseline="${PLUGINSDIR}/.github/ci/package-baseline.txt"
+	[ -f "${package_baseline}" ] || {
+		echo ">>> Missing package build baseline: ${package_baseline}" >&2
+		exit 1
+	}
 	for package in ${packages}; do
+		if grep -Fxq "${package}" "${package_baseline}" &&
+		    ! changed_package "${package}"; then
+			echo ">>> Skipping unchanged package build baseline: ${package}"
+			continue
+		fi
+
 		echo ">>> Packaging ${package}"
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" package
 

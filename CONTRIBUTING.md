@@ -49,6 +49,14 @@ requests check affected package roots, plus all packages for shared `Mk`,
 `Scripts`, `Templates`, or root Make changes. Pushes to `main` and manual runs
 check all packages.
 
+The package-build baseline in `.github/ci/package-baseline.txt` is stricter than
+the formatting baseline. An unchanged `net-mgmt/unifi-maxit` is currently
+linted and dry-checked but not packaged because its tracked Makefile requires
+`unifi6`, which is absent from the current OPNsense 26.7 full repository (the
+catalog publishes `unifi9` and `unifi10`). A change inside that package cannot
+use the exception and must resolve the dependency before its real package build
+can pass. Do not use this manifest to avoid builds for newly changed packages.
+
 To run the same source checks on an OPNsense 26.7 VM, install:
 
 ```sh
