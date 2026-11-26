@@ -80,14 +80,25 @@ fi
 
 [ "${probe_packages}" = yes ] || exit 0
 
+failed=
 while IFS= read -r package; do
 	[ -n "${package}" ] || continue
 	echo ">>> Checking search and dependency closure for ${package}"
-	/usr/local/sbin/pkg search -q -r mimugmail "${package}" \
-	    > "${TMPDIR_BASE}/search.txt"
-	[ -s "${TMPDIR_BASE}/search.txt" ] || {
+	if ! /usr/local/sbin/pkg search -q -r mimugmail "${package}" \
+	    > "${TMPDIR_BASE}/search.txt"; then
+		echo ">>> Catalog search failed for ${package}." >&2
+		failed=yes
+		continue
+	fi
+	if [ ! -s "${TMPDIR_BASE}/search.txt" ]; then
 		echo ">>> No search result for ${package}." >&2
-		exit 1
-	}
-	/usr/local/sbin/pkg install -n -y -r mimugmail "${package}"
+		failed=yes
+		continue
+	fi
+	if ! /usr/local/sbin/pkg install -n -y -r mimugmail "${package}"; then
+		echo ">>> Dependency closure failed for ${package}." >&2
+		failed=yes
+	fi
 done < "${TMPDIR_BASE}/expected.txt"
+
+[ -z "${failed}" ] || exit 1

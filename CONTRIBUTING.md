@@ -14,9 +14,9 @@ precompiled assets here.
 
 For this repository, no new precompiled package or binary may be committed
 without source/provenance, a reproducible build, and an explicit maintainer
-exception. The existing `os-adguardhome-maxit-1.19.pkg` is a legacy artifact
-without matching source in this tree and remains a verification gap; its presence
-is not precedent for new submissions.
+exception. The existing 8.1 MB `os-adguardhome-maxit-1.19.pkg` is a legacy
+artifact without matching source in this tree and remains a verification gap;
+its presence is not precedent for new submissions.
 
 ## Report or submit
 
