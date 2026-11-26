@@ -1,0 +1,56 @@
+name: OPNsense repository catalog smoke
+
+on:
+  schedule:
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  catalog-smoke:
+    name: OPNsense catalog / refresh and dependency dry-run
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Smoke-test the full repository catalog
+        uses: vmactions/opnsense-vm@abaa977e3dbc77a0d1eeed4d82c8d9914b018235 # v1
+        with:
+          release: "26.7"
+          arch: x86_64
+          sync: rsync
+          copyback: false
+          mem: 4096
+          run: |
+            Scripts/ci-catalog.sh full
+
+  single-repository-policy:
+    name: OPNsense catalog / single-repository policy (expected red)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Enforce the documented AdGuard-only catalog policy
+        uses: vmactions/opnsense-vm@abaa977e3dbc77a0d1eeed4d82c8d9914b018235 # v1
+        with:
+          release: "26.7"
+          arch: x86_64
+          sync: rsync
+          copyback: false
+          mem: 4096
+          run: |
+            Scripts/ci-catalog.sh single

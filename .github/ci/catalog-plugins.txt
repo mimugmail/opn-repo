@@ -1,0 +1,16 @@
+os-adguardhome-maxit
+os-clash-maxit
+os-cronscripts-maxit
+os-elasticsearch8-maxit
+os-grafana-maxit
+os-influxdb-maxit
+os-ipcheck-community
+os-kibana8-maxit
+os-ocserv-maxit
+os-opnarp-maxit
+os-softether
+os-speedtest-community
+os-unboundcustom-maxit
+os-unifi-maxit
+os-unifi9-maxit
+os-zeek-maxit

@@ -360,8 +360,10 @@ revision:
 
 test: check
 .if exists(${TESTDIR})
-	@cd ${TESTDIR} && phpunit || true; \
-	    rm -rf ${TESTDIR}/.phpunit.result.cache
+	@status=0; \
+	    (cd ${TESTDIR} && phpunit) || status=$$?; \
+	    rm -rf ${TESTDIR}/.phpunit.result.cache; \
+	    exit $${status}
 .endif
 
 commit:
