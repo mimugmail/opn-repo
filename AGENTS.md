@@ -7,8 +7,9 @@ instructions must not conflict with or weaken them.
 
 ## Repository model
 
-- The Git tree contains eight package roots. The published community catalog is
-  separate, larger, and not fully source-backed here.
+- The Git tree contains a small tracked package set listed in `README.md`. The
+  published community catalog is separate, larger, and not fully source-backed
+  here.
 - Treat OPNsense/FreeBSD package ABI and package ownership as compatibility
   constraints. Do not imply that source build success validates every catalog
   package or production service behavior.

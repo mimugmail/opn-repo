@@ -97,14 +97,15 @@ LC_ALL=C sort -u "${tmp_dir}/changed-shell-files" \
     > "${tmp_dir}/shell-files"
 shellcheck_failed=
 while IFS= read -r script; do
-	if shellcheck -s sh "${script}"; then
+	if grep -Fxq "${script}" "${tmp_dir}/changed-files" ||
+	    ! grep -Fxq "${script}" "${shell_baseline}"; then
+		if ! shellcheck -s sh "${script}"; then
+			shellcheck_failed=yes
+		fi
 		continue
 	fi
 
-	if grep -Fxq "${script}" "${tmp_dir}/changed-files" ||
-	    ! grep -Fxq "${script}" "${shell_baseline}"; then
-		shellcheck_failed=yes
-	else
+	if ! shellcheck -s sh "${script}" >/dev/null 2>&1; then
 		echo ">>> Known ShellCheck baseline: ${script}"
 	fi
 done < "${tmp_dir}/shell-files"

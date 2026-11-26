@@ -208,17 +208,27 @@ CI_SKIP_SELF_TESTS=1 \
     "${host_repo}/Scripts/ci-host-checks.sh" \
     --base "${exec_script}" --head "${approved_binary}"
 
-printf 'net-mgmt/new-exception\n' \
-    >> "${host_repo}/.github/ci/package-baseline.txt"
-git -C "${host_repo}" add .github/ci/package-baseline.txt
-git -C "${host_repo}" commit -q -m "grow package baseline"
-grown_baseline=$(git -C "${host_repo}" rev-parse HEAD)
-if CI_SKIP_SELF_TESTS=1 \
-    "${host_repo}/Scripts/ci-host-checks.sh" \
-    --base "${approved_binary}" --head "${grown_baseline}" \
-    >/dev/null 2>&1
-then
-	fail "source-gate baseline unexpectedly accepted a new exception"
-fi
+baseline_number=0
+for baseline in \
+    .github/ci/package-baseline.txt \
+    .github/ci/shellcheck-baseline.txt \
+    .github/ci/sweep-baseline.txt
+do
+	baseline_number=$((baseline_number + 1))
+	git -C "${host_repo}" switch -q -C \
+	    "baseline-test-${baseline_number}" "${approved_binary}"
+	printf 'new/exception-%s\n' "${baseline_number}" \
+	    >> "${host_repo}/${baseline}"
+	git -C "${host_repo}" add "${baseline}"
+	git -C "${host_repo}" commit -q -m "grow source-gate baseline"
+	grown_baseline=$(git -C "${host_repo}" rev-parse HEAD)
+	if CI_SKIP_SELF_TESTS=1 \
+	    "${host_repo}/Scripts/ci-host-checks.sh" \
+	    --base "${approved_binary}" --head "${grown_baseline}" \
+	    >/dev/null 2>&1
+	then
+		fail "source-gate baseline accepted a new exception: ${baseline}"
+	fi
+done
 
 echo ">>> CI selection and committed-range self-tests passed."
