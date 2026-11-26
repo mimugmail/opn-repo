@@ -158,4 +158,24 @@ then
 	fail "shell validation did not check every pathname"
 fi
 
+git -C "${host_repo}" rm -q Scripts/zzz-ci-test/invalid.sh
+git -C "${host_repo}" commit -q -m "remove bad shell"
+clean_shell=$(git -C "${host_repo}" rev-parse HEAD)
+CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${bad_shell}" --head "${clean_shell}"
+
+printf 'net-mgmt/new-exception\n' \
+    >> "${host_repo}/.github/ci/package-baseline.txt"
+git -C "${host_repo}" add .github/ci/package-baseline.txt
+git -C "${host_repo}" commit -q -m "grow package baseline"
+grown_baseline=$(git -C "${host_repo}" rev-parse HEAD)
+if CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${clean_shell}" --head "${grown_baseline}" \
+    >/dev/null 2>&1
+then
+	fail "source-gate baseline unexpectedly accepted a new exception"
+fi
+
 echo ">>> CI selection and committed-range self-tests passed."

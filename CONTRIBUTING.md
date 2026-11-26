@@ -30,6 +30,29 @@ build evidence, and any install/uninstall or rollback limitations. Disclose any
 AI or automated tools and models used; disclosure is not a ban or an approval
 signal.
 
+## Submission gate
+
+A commit is not merge-ready merely because the source was reviewed. At the
+latest PR head, every changed tracked package must be selected by and pass the
+stable **OPNsense VM/package checks** job before merge. For a package change,
+that means the package's core checks and tests run, a real `.pkg` archive is
+built and validated with `pkg info`, and the local package installability
+dry-run completes. A changed package cannot use the unchanged-package build
+exception, even if its path is present in
+`.github/ci/package-baseline.txt`.
+
+Failures must be fixed by a new commit followed by a fresh successful run.
+Documentation-only changes may report `CI_PACKAGES=__NONE__`, but that is not
+package evidence. Catalog checks are independent evidence and are not a
+substitute for this source gate.
+
+The host portion of the submission gate validates shell and workflow syntax,
+ShellChecks CI helpers and changed shell scripts with shell shebangs, runs
+whitespace/range checks and focused self-tests, and prevents established
+package/sweep baselines from gaining new exceptions. The source/package portion
+uses the disposable OPNsense VM. Do not bypass a red result by editing a
+baseline; remove an exception only after the underlying package is corrected.
+
 ## Source checks
 
 The workflow pins OPNsense 26.7 x86_64, runs in a real `opnsense-vm`, and checks
@@ -57,6 +80,8 @@ linted and dry-checked but not packaged because its tracked Makefile requires
 catalog publishes `unifi9` and `unifi10`). A change inside that package cannot
 use the exception and must resolve the dependency before its real package build
 can pass. Do not use this manifest to avoid builds for newly changed packages.
+Machine-enforced baseline checks reject new entries after the initial baseline
+is established, so normal maintenance can only reduce them.
 
 To run the same source checks on an OPNsense 26.7 VM, install:
 
@@ -99,6 +124,10 @@ base=$(git merge-base origin/main HEAD)
 Scripts/ci-host-checks.sh --base "${base}" --head HEAD
 ```
 
+Install ShellCheck for that host step and the same
+`actionlint -no-color .github/workflows/*.yml` used by CI. Both tools must report
+no errors.
+
 The source job builds real `.pkg` archives, verifies their metadata with `pkg
 info`, and uses `pkg install -n -y -l` as an installability dry run. `make
 package` also installs missing `PLUGIN_DEPENDS`; their package install scripts
@@ -140,4 +169,11 @@ weakened by accepting the extra entries and is not a required pull-request check
 
 Passing checks supplies test evidence only. Maintainer review and any branch
 protection or ruleset settings remain administrative decisions outside workflow
-code.
+code. For a merge-enforcing rollout, the maintainer/admin recommendation is to
+protect `main` with required pull requests, at least one maintainer or code-owner
+approval, dismissal of stale approvals, required conversation resolution, and
+the stable **OPNsense VM/package checks** status at the latest commit. Restrict
+force pushes, branch deletion, and ruleset bypasses; enable secret scanning and
+push protection where available. Consider a `CODEOWNERS` file for package,
+workflow, and policy paths, and keep catalog audit jobs non-required until their
+external failures have a deliberate owner and response process.

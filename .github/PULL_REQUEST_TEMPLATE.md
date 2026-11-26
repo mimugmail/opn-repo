@@ -17,9 +17,21 @@ Describe the smallest reviewable change and explain package/service compatibilit
 - Reproduction before the change:
 - Clean-install result, or "not tested":
 - Upgrade result from the prior package, or "not tested":
+- Uninstall/rollback result, or "not tested":
 - `make lint`, `make style`, `make sweep`, and `make package` results:
 - Relevant logs and screenshots:
 - Full-repository catalog result, if applicable:
+
+## Submission gate
+
+- [ ] The latest commit passed **OPNsense VM/package checks** (link below).
+- [ ] The run selected every affected tracked package and did not use
+      `CI_PACKAGES=__NONE__` for a package-source change.
+- [ ] Every changed package built a real archive, passed metadata validation,
+      and completed the local installability dry-run.
+- [ ] No package/sweep baseline was added or expanded to hide this change.
+
+Successful gate run:
 
 ## Tooling disclosure
 

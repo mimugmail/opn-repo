@@ -28,6 +28,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Lint GitHub Actions workflows
+        run: |
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 -no-color
+
       - name: Validate CI files and select packages
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -36,6 +40,7 @@ jobs:
         run: |
           set -euo pipefail
 
+          # shellcheck disable=SC2153
           base_sha="${BASE_SHA}"
           if [[ "${EVENT_NAME}" == "pull_request" ]]; then
             base_sha="$(git merge-base "${base_sha}" "${HEAD_SHA}")"
