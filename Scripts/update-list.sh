@@ -27,14 +27,51 @@
 
 set -e
 
-PATTERN=XXXNEWLISTHEREXXX
+SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
+MAKE=${MAKE:-make}
+START_MARKER='<!-- package-list:start -->'
+END_MARKER='<!-- package-list:end -->'
 
-(echo '```'; ${MAKE} list 2> /dev/null; echo '```') > README.list
+cd "${PLUGINSDIR}"
 
-sed -e '/```/,/```/c\
-'"${PATTERN}"'
-' README.md > README.temp
+start_count=$(grep -c "^${START_MARKER}$" README.md || true)
+end_count=$(grep -c "^${END_MARKER}$" README.md || true)
+if [ "${start_count}" -ne 1 ] || [ "${end_count}" -ne 1 ]; then
+	echo ">>> README.md needs one package-list marker pair." >&2
+	exit 1
+fi
 
-sed -e "/${PATTERN}/rREADME.list" -e "/${PATTER}/d" README.temp > README.md
+list_file=$(mktemp "${TMPDIR:-/tmp}/opn-readme-list.XXXXXX")
+output_file=$(mktemp "${TMPDIR:-/tmp}/opn-readme.XXXXXX")
+cleanup()
+{
+	rm -f "${list_file}" "${output_file}"
+}
+trap cleanup EXIT HUP INT TERM
 
-rm README.list README.temp
+"${MAKE}" list 2> /dev/null > "${list_file}"
+
+awk -v list_file="${list_file}" '
+/^<!-- package-list:start -->$/ {
+	print
+	print "```text"
+	while ((getline line < list_file) > 0) {
+		print line
+	}
+	close(list_file)
+	print "```"
+	in_list = 1
+	next
+}
+in_list && /^<!-- package-list:end -->$/ {
+	in_list = 0
+	print
+	next
+}
+!in_list {
+	print
+}
+' README.md > "${output_file}"
+
+mv "${output_file}" README.md

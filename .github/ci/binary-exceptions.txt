@@ -1,0 +1,3 @@
+# Paths in this file are explicitly maintainer-approved precompiled package
+# exceptions. New entries require provenance, reproducible-build evidence or a
+# documented impossibility, and a linked maintainer decision.

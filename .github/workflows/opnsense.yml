@@ -1,0 +1,109 @@
+name: OPNsense package CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  opnsense-package-checks:
+    name: OPNsense VM/package checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI_PACKAGES: __NONE__
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Lint GitHub Actions workflows
+        run: |
+          go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.7 -no-color
+
+      - name: Validate CI files and select packages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+
+          # shellcheck disable=SC2153
+          base_sha="${BASE_SHA}"
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            base_sha="$(git merge-base "${base_sha}" "${HEAD_SHA}")"
+          elif [[ -z "${base_sha}" || "${base_sha}" =~ ^0+$ ]]; then
+            base_sha="$(git rev-parse "${HEAD_SHA}^")"
+          fi
+
+          Scripts/ci-host-checks.sh \
+            --base "${base_sha}" \
+            --head "${HEAD_SHA}"
+
+          changed_files="$(
+            git diff --no-renames --name-only "${base_sha}" "${HEAD_SHA}"
+          )"
+          if [[ -z "${changed_files}" ]]; then
+            echo "CI_CHANGED_FILES=__NONE__" >> "${GITHUB_ENV}"
+          else
+            echo "CI_CHANGED_FILES=$(printf '%s\n' "${changed_files}" |
+              paste -sd' ' -)" >> "${GITHUB_ENV}"
+          fi
+
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            scope=changed
+            packages="$(
+              Scripts/ci-packages.sh list \
+                --scope "${scope}" \
+                --base "${base_sha}" \
+                --head "${HEAD_SHA}"
+            )"
+          else
+            scope=full
+            packages="$(Scripts/ci-packages.sh list --scope "${scope}")"
+          fi
+
+          if [[ -z "${packages}" ]]; then
+            echo "CI_PACKAGES=__NONE__" >> "${GITHUB_ENV}"
+          else
+            echo "CI_PACKAGES=$(printf '%s\n' "${packages}" | paste -sd' ' -)" \
+              >> "${GITHUB_ENV}"
+          fi
+
+      - name: Run authoritative checks in OPNsense
+        uses: vmactions/opnsense-vm@abaa977e3dbc77a0d1eeed4d82c8d9914b018235 # v1
+        with:
+          release: "26.7"
+          arch: x86_64
+          sync: rsync
+          copyback: false
+          mem: 6144
+          cache-after-prepare: true
+          envs: CI_PACKAGES CI_CHANGED_FILES
+          prepare: |
+            pkg update -f
+            pkg upgrade -y php85
+            pkg install -y \
+              git \
+              libxml2 \
+              perl5 \
+              php85-pear-PHP_CodeSniffer \
+              py313-pycodestyle
+            php -v
+            phpcs --version
+            phpcbf --version
+            pycodestyle-3.13 --version
+          run: |
+            Scripts/ci-opnsense.sh

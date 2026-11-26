@@ -1,0 +1,10 @@
+<acl>
+    <page-reporting-ipcheck>
+        <name>Reporting: IP Check</name>
+        <patterns>
+            <pattern>ui/ipcheck/*</pattern>
+            <pattern>api/ipcheck/run/*</pattern>
+            <pattern>api/ipcheck/settings/*</pattern>
+        </patterns>
+    </page-reporting-ipcheck>
+</acl>

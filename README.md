@@ -1,31 +1,62 @@
 # opn-repo
-OPNsense repo by mimugmail
 
+This is an unsupported OPNsense community repository maintained by
+[mimugmail](https://github.com/mimugmail). The Git tree contains source for a
+small tracked package set; the published binary repository is larger and is
+documented at <https://www.routerperformance.net/opnsense-repo/>.
 
-Here you'll find source of a couple of plugins but it's mainly just for tracking bugs or new feature requests.
+## Tracked package source
 
-You'll find everything else here:
-https://www.routerperformance.net/opnsense-repo/
-
-Install this repo:
-
+<!-- package-list:start -->
+```text
+dns/nextdns-community -- NextDNS CLI
+dns/unboundcustom-maxit -- Unbound Custom Options
+misc/theme-dracula-community -- Dracula theme - dark mode only
+misc/theme-solarized-community -- Solarized theme - tracking OS dark mode
+net-mgmt/ipcheck-community -- Verification of public IP address
+net-mgmt/speedtest-community -- Speedtest
+net-mgmt/unifi-maxit -- Unifi Controller
+sysutils/auto-recovery -- A configuration rollback feature for OPNsense
 ```
-fetch -o /usr/local/etc/pkg/repos/mimugmail.conf https://www.routerperformance.net/mimugmail.conf
+<!-- package-list:end -->
+
+Source coverage does not imply that every package in the published catalog is
+represented here or has the same support, provenance, or test evidence.
+
+## Install the published repository
+
+```sh
+fetch -o /usr/local/etc/pkg/repos/mimugmail.conf \
+    https://www.routerperformance.net/mimugmail.conf
 pkg update
 ```
 
-Find out what is available in the (installed) repo:
-```
+List available packages:
+
+```sh
 pkg search -g -r mimugmail \*
 ```
 
-Remove this repo:
-```
+Remove the repository configuration:
+
+```sh
 rm /usr/local/etc/pkg/repos/mimugmail.conf
 ```
-(removing the repo will not remove previously installed packages from the repo)
 
-Find out what you have installed from this repo:
-```
+Removing the repository configuration does not uninstall packages that came
+from it. List currently installed packages from this repository with:
+
+```sh
 pkg query -a '%R %n-%v' | grep mimugmail
 ```
+
+## Reporting, contributing, and support
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing package changes. Use
+the issue templates for reproducible bugs and package proposals, and include the
+OPNsense version, FreeBSD package ABI, exact package version, and install or
+upgrade context.
+
+Report sensitive vulnerabilities using the process in
+[SECURITY.md](SECURITY.md). Automation and coding agents must also follow
+[AGENTS.md](AGENTS.md).

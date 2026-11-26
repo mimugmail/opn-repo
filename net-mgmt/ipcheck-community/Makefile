@@ -1,5 +1,6 @@
 PLUGIN_NAME=		ipcheck-community
 PLUGIN_VERSION=		0.4
+PLUGIN_REVISION=	1
 PLUGIN_COMMENT=		Verification of public IP address
 PLUGIN_MAINTAINER=	mihak09@gmail.com
 
