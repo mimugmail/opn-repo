@@ -165,6 +165,49 @@ CI_SKIP_SELF_TESTS=1 \
     "${host_repo}/Scripts/ci-host-checks.sh" \
     --base "${bad_shell}" --head "${clean_shell}"
 
+mkdir -p "${host_repo}/Scripts/zzz-ci-test"
+printf '#!/bin/sh\nexit 0\n' \
+    > "${host_repo}/Scripts/zzz-ci-test/nonexec.sh"
+git -C "${host_repo}" add Scripts/zzz-ci-test/nonexec.sh
+git -C "${host_repo}" commit -q -m "add non-executable script"
+nonexec_script=$(git -C "${host_repo}" rev-parse HEAD)
+if CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${clean_shell}" --head "${nonexec_script}" \
+    >/dev/null 2>&1
+then
+	fail "shell executable-mode validation unexpectedly passed"
+fi
+
+chmod 755 "${host_repo}/Scripts/zzz-ci-test/nonexec.sh"
+git -C "${host_repo}" add Scripts/zzz-ci-test/nonexec.sh
+git -C "${host_repo}" commit -q -m "fix script mode"
+exec_script=$(git -C "${host_repo}" rev-parse HEAD)
+CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${nonexec_script}" --head "${exec_script}"
+
+printf 'not-a-package\n' > "${host_repo}/new-artifact.pkg"
+git -C "${host_repo}" add -f new-artifact.pkg
+git -C "${host_repo}" commit -q -m "add binary package"
+binary_package=$(git -C "${host_repo}" rev-parse HEAD)
+if CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${exec_script}" --head "${binary_package}" \
+    >/dev/null 2>&1
+then
+	fail "precompiled package unexpectedly passed without an exception"
+fi
+
+printf 'new-artifact.pkg\n' \
+    >> "${host_repo}/.github/ci/binary-exceptions.txt"
+git -C "${host_repo}" add .github/ci/binary-exceptions.txt
+git -C "${host_repo}" commit -q -m "approve binary exception"
+approved_binary=$(git -C "${host_repo}" rev-parse HEAD)
+CI_SKIP_SELF_TESTS=1 \
+    "${host_repo}/Scripts/ci-host-checks.sh" \
+    --base "${exec_script}" --head "${approved_binary}"
+
 printf 'net-mgmt/new-exception\n' \
     >> "${host_repo}/.github/ci/package-baseline.txt"
 git -C "${host_repo}" add .github/ci/package-baseline.txt
@@ -172,7 +215,7 @@ git -C "${host_repo}" commit -q -m "grow package baseline"
 grown_baseline=$(git -C "${host_repo}" rev-parse HEAD)
 if CI_SKIP_SELF_TESTS=1 \
     "${host_repo}/Scripts/ci-host-checks.sh" \
-    --base "${clean_shell}" --head "${grown_baseline}" \
+    --base "${approved_binary}" --head "${grown_baseline}" \
     >/dev/null 2>&1
 then
 	fail "source-gate baseline unexpectedly accepted a new exception"

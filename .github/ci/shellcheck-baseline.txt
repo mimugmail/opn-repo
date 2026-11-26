@@ -1,0 +1,2 @@
+net-mgmt/speedtest-community/src/opnsense/scripts/OPNsense/speedtest/install_speedtest.sh
+sysutils/auto-recovery/src/opnsense/scripts/OPNsense/AutoRecovery/auto-recovery.sh

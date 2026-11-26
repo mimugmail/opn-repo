@@ -42,7 +42,7 @@ cleanup()
 	rm -f "${tmp_dir}/shell-files" "${tmp_dir}/yaml-files" \
 	    "${tmp_dir}/changed-shell-files" "${tmp_dir}/changed-files" \
 	    "${tmp_dir}/baseline-old" "${tmp_dir}/baseline-new" \
-	    "${tmp_dir}/baseline-added"
+	    "${tmp_dir}/baseline-added" "${tmp_dir}/binary-artifacts"
 	rmdir "${tmp_dir}"
 }
 trap cleanup EXIT HUP INT TERM
@@ -72,12 +72,21 @@ if ! command -v shellcheck >/dev/null 2>&1; then
 	exit 1
 fi
 
-find Scripts -type f -name 'ci-*.sh' -print \
+shell_baseline="${PLUGINSDIR}/.github/ci/shellcheck-baseline.txt"
+[ -f "${shell_baseline}" ] || {
+	echo ">>> Missing shellcheck baseline: ${shell_baseline}" >&2
+	exit 1
+}
+
+find . \
+    \( -path './.git' -o -path '*/work' \) -prune -o \
+    -type f -name '*.sh' -print |
+    sed 's|^\./||' \
     > "${tmp_dir}/changed-shell-files"
 while IFS= read -r changed_file; do
 	[ -f "${changed_file}" ] || continue
 	case $(sed -n '1p' "${changed_file}") in
-		'#!/bin/sh'*)
+		'#!/bin/sh'*|'#!/usr/bin/env sh'*)
 			printf '%s\n' "${changed_file}" \
 			    >> "${tmp_dir}/changed-shell-files"
 			;;
@@ -86,12 +95,58 @@ done < "${tmp_dir}/changed-files"
 
 LC_ALL=C sort -u "${tmp_dir}/changed-shell-files" \
     > "${tmp_dir}/shell-files"
+shellcheck_failed=
 while IFS= read -r script; do
-	shellcheck -s sh "${script}"
+	if shellcheck -s sh "${script}"; then
+		continue
+	fi
+
+	if grep -Fxq "${script}" "${tmp_dir}/changed-files" ||
+	    ! grep -Fxq "${script}" "${shell_baseline}"; then
+		shellcheck_failed=yes
+	else
+		echo ">>> Known ShellCheck baseline: ${script}"
+	fi
 done < "${tmp_dir}/shell-files"
+[ -z "${shellcheck_failed}" ] || exit 1
+
+while IFS= read -r changed_file; do
+	[ -f "${changed_file}" ] || continue
+	case "${changed_file}" in
+		Scripts/*|*.sh|*/src/etc/rc.d/*|*/scripts/*)
+			case $(sed -n '1p' "${changed_file}") in
+			'#!'*)
+				mode=$(
+					git ls-tree "${head}" -- "${changed_file}" |
+					    awk '{ print $1 }'
+				)
+				[ "${mode}" = 100755 ] || {
+					echo ">>> Executable script lost its mode: ${changed_file}" >&2
+					exit 1
+				}
+				;;
+			esac
+			;;
+	esac
+done < "${tmp_dir}/changed-files"
+
+binary_exceptions="${PLUGINSDIR}/.github/ci/binary-exceptions.txt"
+[ -f "${binary_exceptions}" ] || {
+	echo ">>> Missing binary exception manifest: ${binary_exceptions}" >&2
+	exit 1
+}
+git diff --no-renames --diff-filter=AM --name-only "${base}" "${head}" -- \
+    '*.pkg' > "${tmp_dir}/binary-artifacts"
+while IFS= read -r artifact; do
+	if ! grep -Fxq "${artifact}" "${binary_exceptions}"; then
+		echo ">>> Precompiled package needs a maintainer exception: ${artifact}" >&2
+		exit 1
+	fi
+done < "${tmp_dir}/binary-artifacts"
 
 for baseline in \
     .github/ci/package-baseline.txt \
+    .github/ci/shellcheck-baseline.txt \
     .github/ci/sweep-baseline.txt
 do
 	if ! git cat-file -e "${base}:${baseline}" 2>/dev/null; then

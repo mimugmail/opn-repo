@@ -8,15 +8,20 @@ testing rather than an upstream OPNsense support guarantee.
 
 Report a reproducible problem first for a new plugin or substantial feature.
 Keep submissions small and reviewable, explain the problem and solution, and
-target the latest applicable branch. Source must preserve the BSD-2-Clause
-license. Service binaries belong in the FreeBSD ports tree rather than as
+target the latest applicable branch. Preserve the copyright and license notices
+already attached to a file and document the license/source/provenance of new
+third-party code or assets. The repository `LICENSE` contains project-specific
+terms, while many inherited files and package manifests use BSD-2-Clause; do
+not replace, relicense, or assume those terms are identical without a maintainer
+decision. Service binaries belong in the FreeBSD ports tree rather than as
 precompiled assets here.
 
-For this repository, no new precompiled package or binary may be committed
-without source/provenance, a reproducible build, and an explicit maintainer
-exception. The existing 8.1 MB `os-adguardhome-maxit-1.19.pkg` is a legacy
-artifact without matching source in this tree and remains a verification gap;
-its presence is not precedent for new submissions.
+For this repository, no new or modified precompiled package may be committed
+without source/provenance, a reproducible build or documented impossibility, a
+linked maintainer decision, and an entry in `.github/ci/binary-exceptions.txt`.
+The existing 8.1 MB `os-adguardhome-maxit-1.19.pkg` is a legacy artifact
+without matching source in this tree and remains a verification gap; its
+presence is not precedent for new submissions or an automatic exception.
 
 ## Report or submit
 
@@ -29,6 +34,26 @@ Pull requests should include compatibility analysis, `make` results, package
 build evidence, and any install/uninstall or rollback limitations. Disclose any
 AI or automated tools and models used; disclosure is not a ban or an approval
 signal.
+
+Report sensitive security problems through [SECURITY.md](SECURITY.md) rather
+than a public bug issue. Redact credentials, private addresses, tokens, logs,
+and exploit details before sharing.
+
+## Repository conventions
+
+`.editorconfig`, `.gitattributes`, and `.gitignore` define the basic file,
+line-ending, binary-asset, and generated-file conventions. Keep Makefiles and
+shell indentation consistent with the surrounding file, preserve executable
+bits on directly invoked scripts, and do not commit `work/`, `.phpunit` cache,
+temporary README files, or package archives. Run `make sync` to refresh the
+README package list when package roots change; the license target is
+intentionally separate and must not be used for routine synchronization.
+
+Humans and automation should follow the same review surface: `CONTRIBUTING.md`
+is the policy source, [AGENTS.md](AGENTS.md) adds repository-specific guidance
+for coding agents, and `CLAUDE.md` plus
+`.github/copilot-instructions.md` point their tools to that shared guidance.
+Do not create tool-specific rules that contradict these files.
 
 ## Submission gate
 
@@ -47,11 +72,14 @@ package evidence. Catalog checks are independent evidence and are not a
 substitute for this source gate.
 
 The host portion of the submission gate validates shell and workflow syntax,
-ShellChecks CI helpers and changed shell scripts with shell shebangs, runs
-whitespace/range checks and focused self-tests, and prevents established
-package/sweep baselines from gaining new exceptions. The source/package portion
-uses the disposable OPNsense VM. Do not bypass a red result by editing a
-baseline; remove an exception only after the underlying package is corrected.
+ShellChecks all shell helpers while allowing documented failures only in
+unchanged baseline files, strictly checks changed shell scripts with shell
+shebangs, preserves executable modes, rejects unapproved `.pkg` additions or
+modifications, runs whitespace/range checks and focused self-tests, and prevents
+established package/shell/sweep baselines from gaining new exceptions. The
+source/package portion uses the disposable OPNsense VM. Do not bypass a red
+result by editing a baseline; remove an exception only after the underlying
+package is corrected.
 
 ## Source checks
 
@@ -72,6 +100,11 @@ requests check affected package roots, plus all packages for shared `Mk`,
 `Scripts`, `Templates`, root Make changes, `.github/workflows/opnsense.yml`, or
 `.github/ci` gate baselines. Pushes to `main` and manual runs check all
 packages.
+
+The initial ShellCheck debt is recorded in
+`.github/ci/shellcheck-baseline.txt`. Unchanged entries may retain existing
+findings, but changing one of those files requires it to pass ShellCheck. The
+baseline is shrink-only after this proposal is merged.
 
 The package-build baseline in `.github/ci/package-baseline.txt` is stricter than
 the formatting baseline. An unchanged `net-mgmt/unifi-maxit` is currently
@@ -126,7 +159,9 @@ Scripts/ci-host-checks.sh --base "${base}" --head HEAD
 
 Install ShellCheck for that host step and the same
 `actionlint -no-color .github/workflows/*.yml` used by CI. Both tools must report
-no errors.
+no errors. The OPNsense VM wrapper also runs the root `make list` target so
+repository categorization and package metadata discovery remain valid as
+dotfiles, packages, and legacy root artifacts are added.
 
 The source job builds real `.pkg` archives, verifies their metadata with `pkg
 info`, and uses `pkg install -n -y -l` as an installability dry run. `make
@@ -174,6 +209,7 @@ protect `main` with required pull requests, at least one maintainer or code-owne
 approval, dismissal of stale approvals, required conversation resolution, and
 the stable **OPNsense VM/package checks** status at the latest commit. Restrict
 force pushes, branch deletion, and ruleset bypasses; enable secret scanning and
-push protection where available. Consider a `CODEOWNERS` file for package,
-workflow, and policy paths, and keep catalog audit jobs non-required until their
-external failures have a deliberate owner and response process.
+push protection where available. The proposed `CODEOWNERS` file assigns
+repository control paths to the maintainer, but review remains ineffective
+until required by a repository rule. Keep catalog audit jobs non-required until
+their external failures have a deliberate owner and response process.

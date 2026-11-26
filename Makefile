@@ -25,11 +25,15 @@
 
 PLUGINSDIR?=	${.CURDIR}
 
-_CATEGORIES!=	ls -1d [a-z0-9]*
+_CATEGORIES!=	for ENTRY in [a-z0-9]*; do \
+		[ -d "$$ENTRY" ] && echo "$$ENTRY"; \
+	done
 CATEGORIES?=	${_CATEGORIES}
 
 .for CATEGORY in ${CATEGORIES}
-_${CATEGORY}!=	ls -1d ${CATEGORY}/*
+_${CATEGORY}!=	for ENTRY in ${CATEGORY}/*; do \
+		[ -f "$$ENTRY/Makefile" ] && echo "$$ENTRY"; \
+	done
 PLUGIN_DIRS+=	${_${CATEGORY}}
 .endfor
 
@@ -68,6 +72,6 @@ license:
 readme.md:
 	@MAKE=${MAKE} Scripts/update-list.sh
 
-sync: readme.md license
+sync: readme.md
 
 .PHONY: license readme.md sync

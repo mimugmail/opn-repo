@@ -1,0 +1,14 @@
+# Generated package and test output
+work/
+*.pkg
+.phpunit.result.cache
+__pycache__/
+*.py[cod]
+README.list
+README.temp
+Makefile.tmp
+
+# Local editor and operating-system files
+*~
+*.swp
+.DS_Store

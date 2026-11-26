@@ -33,4 +33,7 @@ fetch -o /usr/local/etc/pkg/repos/mimugmail.conf \
 /usr/local/sbin/pkg update -f
 
 cd "${PLUGINSDIR}"
+make list >/dev/null
+make sync
+git diff --exit-code -- README.md
 Scripts/ci-packages.sh run

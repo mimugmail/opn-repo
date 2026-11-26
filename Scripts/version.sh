@@ -25,10 +25,14 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-set -e
+set -eu
 
-VERSION=$(git describe --abbrev=0 --always ${1})
-REVISION=$(git rev-list ${VERSION}.. --count)
+if [ "$#" -gt 0 ]; then
+	VERSION=$(git describe --abbrev=0 --always "$1")
+else
+	VERSION=$(git describe --abbrev=0 --always)
+fi
+REVISION=$(git rev-list "${VERSION}".. --count)
 HASH=$(git rev-list HEAD --max-count=1 | cut -c1-9)
 
-echo ${VERSION} ${REVISION} ${HASH}
+printf '%s %s %s\n' "${VERSION}" "${REVISION}" "${HASH}"

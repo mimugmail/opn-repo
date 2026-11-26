@@ -11,6 +11,7 @@ Describe the smallest reviewable change and explain package/service compatibilit
 - Package name and version:
 - OPNsense / FreeBSD version and package ABI:
 - Dependency or package-repository compatibility:
+- Added third-party source, asset, or binary license/provenance:
 
 ## Evidence
 
@@ -18,7 +19,8 @@ Describe the smallest reviewable change and explain package/service compatibilit
 - Clean-install result, or "not tested":
 - Upgrade result from the prior package, or "not tested":
 - Uninstall/rollback result, or "not tested":
-- `make lint`, `make style`, `make sweep`, and `make package` results:
+- `make lint`, `make test`, `make style`, `make sweep`, and `make package`
+  results:
 - Relevant logs and screenshots:
 - Full-repository catalog result, if applicable:
 
@@ -29,7 +31,11 @@ Describe the smallest reviewable change and explain package/service compatibilit
       `CI_PACKAGES=__NONE__` for a package-source change.
 - [ ] Every changed package built a real archive, passed metadata validation,
       and completed the local installability dry-run.
-- [ ] No package/sweep baseline was added or expanded to hide this change.
+- [ ] No package/shell/sweep baseline was added or expanded to hide this change.
+- [ ] No shell/sweep lint exception grew; each changed shell script passes
+      ShellCheck and retains its executable mode.
+- [ ] No precompiled `.pkg` was added or changed without a documented
+      maintainer exception and matching provenance entry.
 
 Successful gate run:
 

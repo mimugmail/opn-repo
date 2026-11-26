@@ -17,14 +17,17 @@ why the package belongs in this unsupported community repository.
 
 ## Source and build provenance
 
-Link the source and FreeBSD port where applicable. Explain how a package is
-reproducibly built. Precompiled binaries are not accepted without an explicit
-maintainer exception and provenance.
+Link the source and FreeBSD port where applicable. Identify the license of each
+new code asset, binary, or bundled dependency and preserve upstream copyright
+notices. Explain how a package is reproducibly built. Precompiled binaries are
+not accepted without explicit maintainer approval, provenance, a linked
+decision, and the required exception entry.
 
 ## Compatibility
 
-Describe clean-install and upgrade expectations, configuration migrations,
-conflicts with existing packages, and test evidence.
+Describe clean-install, upgrade, uninstall, and rollback expectations,
+configuration migrations, OPNsense/FreeBSD ABI compatibility, conflicts with
+existing packages, and test evidence.
 
 ## Tooling disclosure
 
