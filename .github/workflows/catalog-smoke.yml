@@ -1,7 +1,6 @@
 name: OPNsense repository catalog smoke
 
 on:
-  pull_request:
   schedule:
     - cron: "17 9 * * 1"
   workflow_dispatch:
