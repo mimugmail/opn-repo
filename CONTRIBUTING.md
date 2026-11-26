@@ -46,6 +46,8 @@ Make changes. Pushes to `main` and manual runs check all packages.
 To run the same source checks on an OPNsense 26.7 VM, install:
 
 ```sh
+pkg update -f
+pkg upgrade -y php85
 pkg install -y git libxml2 perl5 \
     php85-pear-PHP_CodeSniffer py313-pycodestyle
 ```
