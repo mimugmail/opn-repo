@@ -35,15 +35,18 @@ changed_packages()
 
 	git -C "${PLUGINSDIR}" rev-parse --verify "${base}^{commit}" >/dev/null
 	git -C "${PLUGINSDIR}" rev-parse --verify "${head}^{commit}" >/dev/null
+	base=$(git -C "${PLUGINSDIR}" merge-base "${base}" "${head}")
 
 	changed=$(
-		git -C "${PLUGINSDIR}" diff --name-only "${base}" "${head}" --
+		git -C "${PLUGINSDIR}" diff --no-renames \
+		    --name-only "${base}" "${head}" --
 	)
 
 	all=
 	for path in ${changed}; do
 		case "${path}" in
-		Makefile|Mk/*|Scripts/*|Templates/*|Keywords/*|ruleset.xml)
+		Makefile|Mk/*|Scripts/*|Templates/*|Keywords/*|ruleset.xml|\
+		.github/workflows/opnsense.yml|.github/ci/*)
 			all=yes
 			break
 			;;
@@ -177,7 +180,7 @@ changed_package()
 
 check_changed_style()
 {
-	[ "${changed_files}" != __NONE__ ] || return
+	[ "${changed_files}" != __NONE__ ] || return 0
 
 	for changed_source in ${changed_files}; do
 		[ -f "${PLUGINSDIR}/${changed_source}" ] || continue
@@ -305,6 +308,11 @@ run_packages()
 			echo ">>> Skipping unchanged package build baseline: ${package}"
 			continue
 		fi
+
+		for stale in "${PLUGINSDIR}/${package}"/work/pkg/*.pkg; do
+			[ -f "${stale}" ] || continue
+			rm -f "${stale}"
+		done
 
 		echo ">>> Packaging ${package}"
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" package

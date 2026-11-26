@@ -46,8 +46,9 @@ rewrite. The gate fails if sweep changes any file modified by the change or any
 file outside that baseline, then restores the checked-in tree before packaging.
 The baseline must be reduced, not expanded, during normal maintenance. Pull
 requests check affected package roots, plus all packages for shared `Mk`,
-`Scripts`, `Templates`, or root Make changes. Pushes to `main` and manual runs
-check all packages.
+`Scripts`, `Templates`, root Make changes, `.github/workflows/opnsense.yml`, or
+`.github/ci` gate baselines. Pushes to `main` and manual runs check all
+packages.
 
 The package-build baseline in `.github/ci/package-baseline.txt` is stricter than
 the formatting baseline. An unchanged `net-mgmt/unifi-maxit` is currently
@@ -91,12 +92,21 @@ export CI_CHANGED_FILES
 Scripts/ci-opnsense.sh
 ```
 
+Run committed-range checks before the guest step:
+
+```sh
+base=$(git merge-base origin/main HEAD)
+Scripts/ci-host-checks.sh --base "${base}" --head HEAD
+```
+
 The source job builds real `.pkg` archives, verifies their metadata with `pkg
-info`, and uses `pkg install -n -y -l` as an installability dry run. It does not
-install or uninstall production services in the appliance: package scripts may
-restart OPNsense services or start external daemons, so that smoke stage is
-intentionally left to contributor-provided clean-install and upgrade evidence
-rather than being masked as an always-green test.
+info`, and uses `pkg install -n -y -l` as an installability dry run. `make
+package` also installs missing `PLUGIN_DEPENDS`; their package install scripts
+may execute and modify the system. Run the workflow only in the disposable
+OPNsense VM. The built plugin itself is not installed or uninstalled: its
+package scripts may restart OPNsense services or start external daemons, so that
+smoke stage remains contributor-provided clean-install and upgrade evidence
+rather than an always-green test.
 
 ## Published repository checks
 

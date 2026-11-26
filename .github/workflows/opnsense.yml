@@ -35,14 +35,21 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
-          Scripts/ci-host-checks.sh
 
           base_sha="${BASE_SHA}"
-          if [[ -z "${base_sha}" || "${base_sha}" =~ ^0+$ ]]; then
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            base_sha="$(git merge-base "${base_sha}" "${HEAD_SHA}")"
+          elif [[ -z "${base_sha}" || "${base_sha}" =~ ^0+$ ]]; then
             base_sha="$(git rev-parse "${HEAD_SHA}^")"
           fi
 
-          changed_files="$(git diff --name-only "${base_sha}" "${HEAD_SHA}")"
+          Scripts/ci-host-checks.sh \
+            --base "${base_sha}" \
+            --head "${HEAD_SHA}"
+
+          changed_files="$(
+            git diff --no-renames --name-only "${base_sha}" "${HEAD_SHA}"
+          )"
           if [[ -z "${changed_files}" ]]; then
             echo "CI_CHANGED_FILES=__NONE__" >> "${GITHUB_ENV}"
           else
