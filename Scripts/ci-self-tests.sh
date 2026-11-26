@@ -116,7 +116,9 @@ chmod 755 \
     "${host_repo}/Scripts/ci-self-tests.sh"
 git -C "${host_repo}" add Scripts/ci-host-checks.sh \
     Scripts/ci-self-tests.sh
-git -C "${host_repo}" commit -q -m "use working CI checks"
+if ! git -C "${host_repo}" diff --cached --quiet; then
+	git -C "${host_repo}" commit -q -m "use working CI checks"
+fi
 range_base=$(git -C "${host_repo}" rev-parse HEAD)
 
 CI_SKIP_SELF_TESTS=1 \
