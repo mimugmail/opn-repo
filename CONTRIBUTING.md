@@ -123,6 +123,13 @@ service health, or every dependency package in the 159-entry catalog. Missing
 dependencies reported by this job are remeasured from the current package
 catalog on every run rather than stored as a hard-coded failure baseline.
 
+The corrected cross-repository probe currently finds two missing-dependency
+chains: `os-kibana8-maxit` through `node24` to `nbytes`, and
+`os-zeek-maxit` through `zeek` to `py313-zkg`. The fetched
+`os-adguardhome-maxit` archive passes metadata validation, but its local
+dry-run ends in a `pkg` child-process segmentation fault; that is tracked as a
+separate catalog reproducibility failure, not counted as a missing dependency.
+
 The repository's public page says `mimugmail-single.conf` is AdGuard-only, but
 the current FreeBSD:15:amd64 single catalog contains six `os-*` plugins. The
 separate policy job is intentionally expected-red on this known
