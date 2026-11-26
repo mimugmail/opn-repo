@@ -109,7 +109,8 @@ while IFS= read -r package; do
 	fi
 	artifact=$(sed -n '1p' "${TMPDIR_BASE}/artifacts.txt")
 
-	if ! /usr/local/sbin/pkg install -n -y -l "${artifact}"; then
+	# Keep dependency resolution open to every enabled repository.
+	if ! /usr/local/sbin/pkg install -n -y -U "${artifact}"; then
 		echo ">>> Dependency closure failed for ${package}." >&2
 		failed=yes
 	fi
