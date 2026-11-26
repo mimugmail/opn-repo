@@ -9,21 +9,15 @@ set -eu
 
 SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
 PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
-TMPDIR_BASE=${TMPDIR:-/tmp}/opn-catalog-ci.$$
+TMPDIR_BASE=$(mktemp -d "${TMPDIR:-/tmp}/opn-catalog-ci.XXXXXX")
 
 cleanup()
 {
-	rm -f "${TMPDIR_BASE}/packages.txt" \
-	    "${TMPDIR_BASE}/plugins.txt" \
-	    "${TMPDIR_BASE}/expected.txt" \
-	    "${TMPDIR_BASE}/unexpected.txt" \
-	    "${TMPDIR_BASE}/missing.txt" \
-	    "${TMPDIR_BASE}/search.txt"
-	rmdir "${TMPDIR_BASE}"
+	[ -d "${TMPDIR_BASE}" ] || return 0
+	rm -rf "${TMPDIR_BASE}"
 }
 
 trap cleanup EXIT HUP INT TERM
-mkdir "${TMPDIR_BASE}"
 
 case "$1" in
 full)
@@ -95,7 +89,27 @@ while IFS= read -r package; do
 		failed=yes
 		continue
 	fi
-	if ! /usr/local/sbin/pkg install -n -y -r mimugmail "${package}"; then
+
+	fetch_dir="${TMPDIR_BASE}/fetch/${package}"
+	mkdir -p "${fetch_dir}"
+	if ! /usr/local/sbin/pkg fetch -U -y -r mimugmail \
+	    -o "${fetch_dir}" "${package}"; then
+		echo ">>> Artifact fetch failed for ${package}." >&2
+		failed=yes
+		continue
+	fi
+
+	find "${fetch_dir}" -type f -name '*.pkg' -print |
+	    LC_ALL=C sort > "${TMPDIR_BASE}/artifacts.txt"
+	artifact_count=$(wc -l < "${TMPDIR_BASE}/artifacts.txt" | tr -d ' ')
+	if [ "${artifact_count}" -ne 1 ]; then
+		echo ">>> Expected one artifact for ${package}; got ${artifact_count}." >&2
+		failed=yes
+		continue
+	fi
+	artifact=$(sed -n '1p' "${TMPDIR_BASE}/artifacts.txt")
+
+	if ! /usr/local/sbin/pkg install -n -y -l "${artifact}"; then
 		echo ">>> Dependency closure failed for ${package}." >&2
 		failed=yes
 	fi

@@ -116,18 +116,12 @@ binary corpus.
 
 It installs the published full-repository configuration, refreshes metadata,
 records the OPNsense version and package ABI, verifies the maintained `os-*`
-manifest, and dry-runs dependency resolution for each expected plugin. Current
-coverage does not prove package execution, clean installation, upgrades,
-uninstalls, service health, or every dependency package in the 159-entry
-catalog.
-
-The OPNsense 26.7 baseline currently finds all 159 catalog entries and all 16
-manifested `os-*` plugins, but dependency closure is red for
-`os-elasticsearch8-maxit` (`bash`), `os-kibana8-maxit` (`nbytes`),
-`os-ocserv-maxit` (`libxslt`), `os-opnarp-maxit` (`bash`),
-`os-unifi-maxit` and `os-unifi9-maxit` (`libfontenc`), and `os-zeek-maxit`
-(`bash`). These are published-catalog findings, not failures hidden by the
-tracked-source job.
+manifest, fetches exactly one target plugin archive from `mimugmail`, and
+dry-runs that local archive against the enabled repositories. Current coverage
+does not prove package execution, clean installation, upgrades, uninstalls,
+service health, or every dependency package in the 159-entry catalog. Missing
+dependencies reported by this job are remeasured from the current package
+catalog on every run rather than stored as a hard-coded failure baseline.
 
 The repository's public page says `mimugmail-single.conf` is AdGuard-only, but
 the current FreeBSD:15:amd64 single catalog contains six `os-*` plugins. The
