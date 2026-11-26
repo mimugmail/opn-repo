@@ -7,8 +7,8 @@ set -eu
 	exit 2
 }
 
-SCRIPTSDIR=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
-PLUGINSDIR=$(CDPATH= cd -- "${SCRIPTSDIR}/.." && pwd)
+SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
 TMPDIR_BASE=${TMPDIR:-/tmp}/opn-catalog-ci.$$
 
 cleanup()

@@ -2,8 +2,8 @@
 
 set -eu
 
-SCRIPTSDIR=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
-PLUGINSDIR=$(CDPATH= cd -- "${SCRIPTSDIR}/.." && pwd)
+SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
 MAKE=${MAKE:-make}
 
 usage()
@@ -183,7 +183,9 @@ run_packages()
 	done
 
 	echo ">>> Checking package metadata, lint, tests, and style:"
-	printf '    %s\n' ${packages}
+	for package in ${packages}; do
+		printf '    %s\n' "${package}"
+	done
 	for package in ${packages}; do
 		echo ">>> Entering ${package}"
 		"${MAKE}" -C "${PLUGINSDIR}/${package}" check

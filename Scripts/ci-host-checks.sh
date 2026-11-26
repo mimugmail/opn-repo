@@ -2,8 +2,8 @@
 
 set -eu
 
-SCRIPTSDIR=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
-PLUGINSDIR=$(CDPATH= cd -- "${SCRIPTSDIR}/.." && pwd)
+SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
 
 cd "${PLUGINSDIR}"
 

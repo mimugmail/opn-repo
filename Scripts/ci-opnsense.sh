@@ -2,9 +2,9 @@
 
 set -eu
 
-SCRIPTSDIR=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
-PLUGINSDIR=$(CDPATH= cd -- "${SCRIPTSDIR}/.." && pwd)
-COREDIR=$(CDPATH= cd -- "${PLUGINSDIR}/.." && pwd)/core
+SCRIPTSDIR=$(CDPATH='' cd -- "$(dirname "$0")" && pwd)
+PLUGINSDIR=$(CDPATH='' cd -- "${SCRIPTSDIR}/.." && pwd)
+COREDIR=$(CDPATH='' cd -- "${PLUGINSDIR}/.." && pwd)/core
 CORE_REF=4092e306ab6cfa9748875053fbb41c4c7cd5af2d
 CORE_BRANCH=stable/26.7
 
