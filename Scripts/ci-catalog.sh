@@ -108,6 +108,11 @@ while IFS= read -r package; do
 		continue
 	fi
 	artifact=$(sed -n '1p' "${TMPDIR_BASE}/artifacts.txt")
+	if ! /usr/local/sbin/pkg info -F "${artifact}" >/dev/null; then
+		echo ">>> Artifact metadata validation failed for ${package}." >&2
+		failed=yes
+		continue
+	fi
 
 	# Keep dependency resolution open to every enabled repository.
 	if ! /usr/local/sbin/pkg install -n -y -U "${artifact}"; then
