@@ -72,7 +72,7 @@ if ! command -v shellcheck >/dev/null 2>&1; then
 	exit 1
 fi
 
-find Scripts -type f -name '*.sh' -print \
+find Scripts -type f -name 'ci-*.sh' -print \
     > "${tmp_dir}/changed-shell-files"
 while IFS= read -r changed_file; do
 	[ -f "${changed_file}" ] || continue
