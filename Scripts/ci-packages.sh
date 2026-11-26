@@ -296,7 +296,7 @@ run_packages()
 		}
 
 		/usr/local/sbin/pkg info -F "${artifact}" >/dev/null
-		/usr/local/sbin/pkg install -n -l "${artifact}"
+		/usr/local/sbin/pkg install -n -y -l "${artifact}"
 		echo ">>> Package archive verified: ${artifact}"
 	done
 
