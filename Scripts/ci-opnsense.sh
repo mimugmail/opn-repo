@@ -8,6 +8,8 @@ COREDIR=$(CDPATH='' cd -- "${PLUGINSDIR}/.." && pwd)/core
 CORE_REF=4092e306ab6cfa9748875053fbb41c4c7cd5af2d
 CORE_BRANCH=stable/26.7
 
+git config --global --add safe.directory "${PLUGINSDIR}"
+
 [ ! -e "${COREDIR}" ] || {
 	echo ">>> Refusing to replace adjacent core checkout: ${COREDIR}" >&2
 	exit 1
