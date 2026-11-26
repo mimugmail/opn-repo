@@ -111,6 +111,14 @@ coverage does not prove package execution, clean installation, upgrades,
 uninstalls, service health, or every dependency package in the 159-entry
 catalog.
 
+The OPNsense 26.7 baseline currently finds all 159 catalog entries and all 16
+manifested `os-*` plugins, but dependency closure is red for
+`os-elasticsearch8-maxit` (`bash`), `os-kibana8-maxit` (`nbytes`),
+`os-ocserv-maxit` (`libxslt`), `os-opnarp-maxit` (`bash`),
+`os-unifi-maxit` and `os-unifi9-maxit` (`libfontenc`), and `os-zeek-maxit`
+(`bash`). These are published-catalog findings, not failures hidden by the
+tracked-source job.
+
 The repository's public page says `mimugmail-single.conf` is AdGuard-only, but
 the current FreeBSD:15:amd64 single catalog contains six `os-*` plugins. The
 separate policy job is intentionally expected-red on this known
