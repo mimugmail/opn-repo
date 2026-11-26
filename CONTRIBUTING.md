@@ -84,11 +84,11 @@ Scripts/ci-opnsense.sh
 ```
 
 The source job builds real `.pkg` archives, verifies their metadata with `pkg
-info`, and uses `pkg add -n` as an installability dry run. It does not install or
-uninstall production services in the appliance: package scripts may restart
-OPNsense services or start external daemons, so that smoke stage is intentionally
-left to contributor-provided clean-install and upgrade evidence rather than
-being masked as an always-green test.
+info`, and uses `pkg install -n -l` as an installability dry run. It does not
+install or uninstall production services in the appliance: package scripts may
+restart OPNsense services or start external daemons, so that smoke stage is
+intentionally left to contributor-provided clean-install and upgrade evidence
+rather than being masked as an always-green test.
 
 ## Published repository checks
 
